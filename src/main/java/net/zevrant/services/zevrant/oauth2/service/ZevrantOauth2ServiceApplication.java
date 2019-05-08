@@ -1,4 +1,4 @@
-package net.zevrantservices.zevrantoauth2service;
+package net.zevrant.services.zevrant.oauth2.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

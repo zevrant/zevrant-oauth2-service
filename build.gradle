@@ -10,6 +10,15 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
+	def accessKeyProperty = System.getenv().get("ACCESS_KEY")
+	def secretKeyProperty = System.getenv().get("SECRET_KEY")
+	maven {
+		url "s3://zevrant-security-common"
+		credentials(AwsCredentials) {
+			accessKey = accessKeyProperty
+			secretKey = secretKeyProperty
+		}
+	}
 	mavenCentral()
 }
 
@@ -19,11 +28,13 @@ ext {
 }
 
 dependencies {
+	implementation 'net.zevrant-service:zevrant-security-common:0.0.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'de.codecentric:spring-boot-admin-starter-client'
 	implementation 'org.liquibase:liquibase-core'
+	implementation 'com.h2database:h2:1.4.199'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
