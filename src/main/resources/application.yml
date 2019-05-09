@@ -7,3 +7,12 @@ spring:
     driver-class: org.h2.Driver
     username: sa    
     password: sa
+server:
+  port: 9001
+  servlet:
+    context-path: /zevrant-oauth2-service/
+
+zevrant:
+    users:
+      - clientId: test
+        clientSecret: test
