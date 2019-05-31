@@ -10,9 +10,28 @@ spring:
 server:
   port: 9001
   servlet:
-    context-path: /zevrant-oauth2-service/
+    context-path: /zevrant-oauth2-service
+
 
 zevrant:
-    users:
-      - clientId: test
-        clientSecret: test
+    oauth:
+      clients:
+        users:
+          - client-id: test
+            client-secret: '{noop}test'
+            grant-types:
+              - client_credentials
+            scopes:
+              - DEFAULT
+            redirect-uris: localhost:8080
+            granted-authorities:
+              - DEFAULT
+            access-token-validity-seconds: 300
+            refresh-token-validity-seconds: 300
+            auto-approve: true
+            additional-information:
+              -
+security:
+  oauth2:
+    client:
+      access-token-uri: /oauth/token
