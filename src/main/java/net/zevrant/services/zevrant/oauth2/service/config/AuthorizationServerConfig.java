@@ -1,6 +1,7 @@
 package net.zevrant.services.zevrant.oauth2.service.config;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -8,7 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.*;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -21,8 +21,10 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,13 +33,26 @@ import java.util.Map;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter implements WebMvcConfigurer {
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    private ClientDetailsService userProvider;
+    private final ClientDetailsService userProvider;
 
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, ClientDetailsService userProvider) {
+    private final String keystorePassword;
+
+    private final String keystoreAlias;
+
+    private final SecretResource keystore;
+
+    @Autowired
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager, ClientDetailsService userProvider,
+                                     @Value("${encrypted.properties.oauth2.oauth2.keystore.password}") String keystorePassword,
+                                     @Value("${encrypted.properties.oauth2.oauth2.keystore.store}") File keystore,
+                                     @Value("${encrypted.properties.oauth2.oauth2.keystore.alias}") String keystoreAlias) {
         this.authenticationManager = authenticationManager;
         this.userProvider = userProvider;
+        this.keystorePassword = keystorePassword;
+        this.keystore = new SecretResource(keystore);
+        this.keystoreAlias = keystoreAlias;
     }
 
     @Override
@@ -58,7 +73,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Primary
     @Bean
     public PasswordEncoder passwordEncoder() {
-        Map encoders = new HashMap<>();
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
         encoders.put("bcrypt", new BCryptPasswordEncoder());
         encoders.put("noop", NoOpPasswordEncoder.getInstance());
         encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
@@ -66,7 +81,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         encoders.put("sha256", new StandardPasswordEncoder());
         encoders.put("null", encoders.get("noop"));
 
-        return new DelegatingPasswordEncoder("bcrypt", encoders);
+        return new DelegatingPasswordEncoder("sha256", encoders);
 
     }
 
@@ -78,7 +93,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("123");
+        KeyStoreKeyFactory keyStoreKeyFactory =
+                new KeyStoreKeyFactory(keystore, keystorePassword.toCharArray());
+        converter.setKeyPair(keyStoreKeyFactory.getKeyPair(keystoreAlias));
         return converter;
     }
 

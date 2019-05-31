@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   profiles:
     active: local
 
@@ -11,6 +13,13 @@ server:
   port: 9001
   servlet:
     context-path: /zevrant-oauth2-service
+
+context:
+  initializer:
+    classes: net.zevrantservices.zevrantsecuritycommon.secrets.management.EncyptedPropertyContextInitializer
+
+encrypted:
+  properties: oauth2.oauth2.keystore.password,oauth2.oauth2.keystore.store,oauth2.oauth2.keystore.alias
 
 
 zevrant:
