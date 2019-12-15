@@ -24,7 +24,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests().antMatchers("/login").permitAll().and()
+                .authorizeRequests().antMatchers("/login", "/register").permitAll().and()
                 // default protection for all resources (including /oauth/authorize)
                 .authorizeRequests()
                 .anyRequest().hasRole("USER");

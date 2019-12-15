@@ -7,19 +7,40 @@ databaseChangeLog:
             tableName: test
             columns:
               - column:
-                  name: id
+                  name: ID
                   type: int
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: first_name
+                  name: USERNAME
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: last_name
+                  name: PASSWORD
                   type: varchar(255)
                   constraints:
                     nullable: false
+#        - createSequence:
+#            dataType: int
+#            incrementBy: 1
+#            sequenceName: users
+#            minValue: 0
+#            maxValue: 1000
+#            ordered: true
+#            schemaName: public
+#            startValue: 0
+        - createSequence:
+            cacheSize: 371717
+            catalogName: cat
+            cycle: true
+            dataType: int
+            incrementBy: 2
+            maxValue: 1000
+            minValue: 10
+            ordered: true
+            schemaName: public
+            sequenceName: seq_id
+            startValue: 5

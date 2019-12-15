@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.4.RELEASE'
+	id 'org.springframework.boot' version '2.2.2.RELEASE'
 	id 'java'
 }
 
@@ -10,42 +10,36 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 ext {
-	set('awsAccessKey', System.getenv().get("ACCESS_KEY"))
-	set('awsSecretKey', System.getenv().get("SECRET_KEY"))
-	set('springBootAdminVersion', '2.1.4')
 	set('springCloudVersion', 'Greenwich.SR1')
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 	maven {
-		url "s3://zevrant-security-common"
-		credentials(AwsCredentials) {
-			accessKey = awsAccessKey
-			secretKey = awsSecretKey
+		url "s3://zevrant-artifact-store"
+		authentication {
+			awsIm(AwsImAuthentication)
 		}
 	}
-	
 }
-
 dependencies {
 	implementation 'net.zevrant-services:zevrant-security-common:+'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'de.codecentric:spring-boot-admin-starter-client'
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'com.h2database:h2:1.4.199'
 //	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
-	implementation 'org.springframewoork.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-security-jwt'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-jwt:1.1.0.RELEASE'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 dependencyManagement {
 	imports {
-		mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }

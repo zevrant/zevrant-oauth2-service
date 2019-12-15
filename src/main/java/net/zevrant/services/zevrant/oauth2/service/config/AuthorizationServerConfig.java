@@ -1,5 +1,7 @@
 package net.zevrant.services.zevrant.oauth2.service.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +35,8 @@ import java.util.Map;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter implements WebMvcConfigurer {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthorizationServerConfig.class);
+
     private final AuthenticationManager authenticationManager;
 
     private final ClientDetailsService userProvider;
@@ -45,9 +49,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     public AuthorizationServerConfig(AuthenticationManager authenticationManager, ClientDetailsService userProvider,
-                                     @Value("${encrypted.properties.oauth2.oauth2.keystore.password}") String keystorePassword,
-                                     @Value("${encrypted.properties.oauth2.oauth2.keystore.store}") File keystore,
-                                     @Value("${encrypted.properties.oauth2.oauth2.keystore.alias}") String keystoreAlias) {
+                                     @Value("${server.ssl.key-store-password}") String keystorePassword,
+                                     @Value("${server.ssl.key-store}") File keystore,
+                                     @Value("${oauth2.keystore.alias}") String keystoreAlias) {
         this.authenticationManager = authenticationManager;
         this.userProvider = userProvider;
         this.keystorePassword = keystorePassword;
@@ -73,15 +77,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Primary
     @Bean
     public PasswordEncoder passwordEncoder() {
-        Map<String, PasswordEncoder> encoders = new HashMap<>();
-        encoders.put("bcrypt", new BCryptPasswordEncoder());
-        encoders.put("noop", NoOpPasswordEncoder.getInstance());
-        encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
-        encoders.put("scrypt", new SCryptPasswordEncoder());
-        encoders.put("sha256", new StandardPasswordEncoder());
-        encoders.put("null", encoders.get("noop"));
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(31);
+        logger.info("Successfullly tested encoder {}", encoder.encode("TESTPassword"));
 
-        return new DelegatingPasswordEncoder("sha256", encoders);
+        return encoder;
 
     }
 

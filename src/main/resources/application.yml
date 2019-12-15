@@ -2,7 +2,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: local
+    active: prod
 
   datasource:
     url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
@@ -13,34 +13,49 @@ server:
   port: 9001
   servlet:
     context-path: /zevrant-oauth2-service
+  ssl:
+    key-store: /storage/keys/zevrant-services.p12
+    key-store-type: PKCS12
+    key-store-password: ${ssl.keystore.password}
+
+oauth2:
+  keystore:
+    alias: 1
 
 context:
   initializer:
-    classes: net.zevrantservices.zevrantsecuritycommon.secrets.management.EncyptedPropertyContextInitializer
-
-encrypted:
-  properties: oauth2.oauth2.keystore.password,oauth2.oauth2.keystore.store,oauth2.oauth2.keystore.alias
-
+    classes: net.zevrant.services.security.common.secrets.management.services.EncryptedPropertyContextInitializer
 
 zevrant:
-    oauth:
-      clients:
-        users:
-          - client-id: test
-            client-secret: '{noop}test'
-            grant-types:
-              - client_credentials
-            scopes:
-              - DEFAULT
-            redirect-uris: localhost:8080
-            granted-authorities:
-              - DEFAULT
-            access-token-validity-seconds: 300
-            refresh-token-validity-seconds: 300
-            auto-approve: true
-            additional-information:
-              -
+  encrypted:
+    properties: ssl/keystore/password
+  oauth:
+    clients:
+      users:
+        - client-id: test
+          client-secret: '{noop}test'
+          grant-types:
+            - client_credentials
+          scopes:
+            - DEFAULT
+          redirect-uris: localhost:8080
+          granted-authorities:
+            - DEFAULT
+          access-token-validity-seconds: 300
+          refresh-token-validity-seconds: 300
+          auto-approve: true
+          additional-information:
+            -
 security:
   oauth2:
     client:
       access-token-uri: /oauth/token
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  health:
+    ldap:
+      enabled: false
