@@ -18,12 +18,18 @@ public class ZevrantsClientDetails implements ClientDetails {
     private boolean autoApprove;
     private Map<String, Object> additionalInformation;
 
-    public ZevrantsClientDetails() {
+    private ZevrantsClientDetails() {
         grantTypes = new HashSet<>();
         scopes = new HashSet<>();
         redirectUris = new HashSet<>();
         grantedAuthorities = new HashSet<>();
         additionalInformation = new HashMap<>();
+    }
+
+    ZevrantsClientDetails(String clientId, String clientSecret) {
+        this();
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
     }
 
     @Override

@@ -4,6 +4,7 @@ public class RegistrationRequest {
 
     private String clientId;
     private String clientSecret;
+    private String registrationCode;
 
     public RegistrationRequest() {
     }
@@ -27,5 +28,13 @@ public class RegistrationRequest {
 
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
+    }
+
+    public String getRegistrationCode() {
+        return registrationCode;
+    }
+
+    public void setRegistrationCode(String registrationCode) {
+        this.registrationCode = registrationCode;
     }
 }

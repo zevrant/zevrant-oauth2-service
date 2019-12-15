@@ -15,7 +15,8 @@ public class RegistrationController {
 
     @PostMapping
     public RegistrationResponse register(@RequestBody RegistrationRequest request) {
-        boolean wasSuccessful = registrationService.register(request.getClientId(), request.getClientSecret());
+        boolean wasSuccessful = registrationService.register(request.getClientId(), request.getClientSecret(), request.getRegistrationCode());
         return new RegistrationResponse( request.getClientId(), wasSuccessful);
     }
+
 }

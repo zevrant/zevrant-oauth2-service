@@ -4,7 +4,7 @@ databaseChangeLog:
       author: zevrant
       changes:
         - createTable:
-            tableName: test
+            tableName: USERS
             columns:
               - column:
                   name: ID
@@ -20,27 +20,38 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: PASSWORD
-                  type: varchar(255)
+                  type: varchar(60)
                   constraints:
                     nullable: false
-#        - createSequence:
-#            dataType: int
-#            incrementBy: 1
-#            sequenceName: users
-#            minValue: 0
-#            maxValue: 1000
-#            ordered: true
-#            schemaName: public
-#            startValue: 0
+  - changeSet:
+      id: 2
+      author: zevrant
+      changes:
         - createSequence:
-            cacheSize: 371717
-            catalogName: cat
-            cycle: true
             dataType: int
-            incrementBy: 2
+            incrementBy: 1
+            sequenceName: USERS
+            minValue: 1
             maxValue: 1000
-            minValue: 10
             ordered: true
             schemaName: public
-            sequenceName: seq_id
-            startValue: 5
+            startValue: 1
+  - changeSet:
+      id: 3
+      author: zevrant
+      changes:
+        - createTable:
+            tableName: REGISTER
+            columns:
+              - column:
+                  name: registrationCode
+                  type: varchar(20)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: expirationDate
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+                    unique: true
