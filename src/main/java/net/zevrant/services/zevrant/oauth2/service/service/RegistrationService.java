@@ -1,6 +1,5 @@
 package net.zevrant.services.zevrant.oauth2.service.service;
 
-import com.amazonaws.services.secretsmanager.model.ResourceNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.entity.Registration;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.repository.RegistrationRepository;
@@ -49,7 +48,7 @@ public class RegistrationService {
                 throw new ResourceAccessException("Resource is expired removing from database");
             }
         } catch (EntityNotFoundException ex) {
-            throw new ResourceNotFoundException("Could not find registration code " + registrationCode);
+            throw new ResourceAccessException("Could not find registration code " + registrationCode);
         }
         registrationRepository.delete(registration);
     }

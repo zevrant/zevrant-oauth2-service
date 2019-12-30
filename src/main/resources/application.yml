@@ -27,6 +27,8 @@ context:
     classes: net.zevrant.services.security.common.secrets.management.services.EncryptedPropertyContextInitializer
 
 zevrant:
+  bucketName: 'zevrant-resources'
+  keystore: '/prod/ssl/keystore.p12'
   encrypted:
     properties: ssl/keystore/password
   oauth:
