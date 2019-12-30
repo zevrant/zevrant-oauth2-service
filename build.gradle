@@ -15,17 +15,16 @@ ext {
 
 repositories {
 	mavenLocal()
+	mavenCentral()
 	maven {
 		url "s3://zevrant-artifact-store"
 		authentication {
 			awsIm(AwsImAuthentication)
 		}
 	}
-	mavenCentral()
-
 }
 dependencies {
-	implementation 'net.zevrant-services:zevrant-security-common:34'
+	implementation 'net.zevrant-services:zevrant-security-common:0.0.34'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
