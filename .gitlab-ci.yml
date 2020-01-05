@@ -40,7 +40,7 @@ imageBuild:
   stage: imageBuild
   script:
     - 'bash gradlew assemble -PprojVersion=$VERSION'
-    - 'docker build --build-arg a_version=$VERSION -t zevrant/zevrant-discovery-service:latest -t zevrant/zevrant-discovery-service:$VERSION .'
+    - 'docker build -t zevrant/zevrant-oauth2-service:latest -t zevrant/zevrant-oauth2-service:$VERSION .'
     - 'docker push zevrant/zevrant-oauth2-service:latest'
     - 'docker push zevrant/zevrant-oauth2-service:$VERSION'
     - 'git tag zevrant-oauth2-service-$VERSION'
@@ -51,7 +51,7 @@ updateVersion:
     - IFS='.'
     - read -ra arr <<< "$VERSION"
     - minorVersion=$( expr ${arr[2]} + 1 )
-    - aws ssm put-parameter --name zevrant-discovery-service-VERSION --value ${arr[0]}.${arr[1]}.$minorVersion --type String --overwrite
+    - aws ssm put-parameter --name zevrant-oauth2-service-VERSION --value ${arr[0]}.${arr[1]}.$minorVersion --type String --overwrite
 
 deploy:
   stage: deploy
