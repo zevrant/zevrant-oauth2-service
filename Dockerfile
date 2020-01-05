@@ -25,6 +25,6 @@ CMD mkdir -p ~/.aws; echo "[default]" > ~/.aws/credentials\
  && echo $IP\
  && read -ra arr <<< "$IP"\
  && echo ${arr[0]}\
- && export IP_ADDRESS=${arr[2]}\
+ && export IP_ADDRESS=${arr[0]}\
  && echo $IP_ADDRESS \
  && java -jar -Dspring.profiles.active=prod -Deureka.instance.hostname=$IP_ADDRESS /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
