@@ -23,10 +23,9 @@ before_script:
 stages:
   - test
   - sonarScan
-  - updateVersion
   - imageBuild
   - deploy
-
+  - updateVersion
 
 sonarScan:
   stage: sonarScan
@@ -56,4 +55,4 @@ updateVersion:
 deploy:
   stage: deploy
   script:
-    - VERSION=$VERSION docker stack deploy --compose-file docker-compose.yml
+    - VERSION=$VERSION AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID docker stack deploy --compose-file docker-compose.yml
