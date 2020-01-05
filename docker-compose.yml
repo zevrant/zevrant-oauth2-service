@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  zevrant-oauth2-service:
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    image: zevrant/zevrant-oauth2-service:${VERSION}
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+    environment:
+      VERSION:
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      AWS_DEFAULT_REGION: 'us-east-1'
+      AWS_DEFAULT_OUTPUT: json
+networks:
+  default:
+    external:
+      name: microservices
+
