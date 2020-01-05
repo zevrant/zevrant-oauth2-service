@@ -3,12 +3,15 @@ spring:
     allow-bean-definition-overriding: true
   profiles:
     active: local
-
   datasource:
-    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
-    driver-class: org.h2.Driver
-    username: sa    
-    password: sa
+    url: jdbc:postgresql://database-2.cpvhgxlcfvwx.us-east-1.rds.amazonaws.com:5432/oauth2
+    username: zevrant
+    password: ${rds.oauth.password}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 9001
   servlet:
@@ -28,9 +31,9 @@ context:
 
 zevrant:
   bucketName: 'zevrant-resources'
-  keystore: '/prod/ssl/keystore.p12'
+  keystore: 'prod/ssl/keystore.p12'
   encrypted:
-    properties: ssl/keystore/password
+    properties: ssl/keystore/password,rds/oauth/password
   oauth:
     clients:
       users:

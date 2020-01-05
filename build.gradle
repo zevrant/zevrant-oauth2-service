@@ -7,7 +7,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'net.zevrant-services'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 
 ext {
 	set('springCloudVersion', 'Greenwich.SR1')
@@ -24,17 +24,17 @@ repositories {
 	}
 }
 dependencies {
-	implementation 'net.zevrant-services:zevrant-security-common:0.0.34'
+	implementation 'net.zevrant-services:zevrant-security-common:0.0.37'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.liquibase:liquibase-core:3.8.2'
+	implementation 'org.liquibase:liquibase-core:3.8.4'
 	implementation 'com.h2database:h2:1.4.200'
 //	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-jwt:1.1.0.RELEASE'
-
+	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

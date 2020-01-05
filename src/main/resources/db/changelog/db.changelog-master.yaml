@@ -31,9 +31,8 @@ databaseChangeLog:
             dataType: int
             incrementBy: 1
             sequenceName: USERS
-            minValue: 1
+            minValue: 0
             maxValue: 1000
-            ordered: true
             schemaName: public
             startValue: 1
   - changeSet:
