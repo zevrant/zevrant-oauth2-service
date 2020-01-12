@@ -67,4 +67,5 @@ management:
 
 logging:
   level:
-    root: debug
+    root: ERROR
+    net.zevrant.services.zevrant.oauth2.service: INFO
