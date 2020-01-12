@@ -3,26 +3,26 @@ package net.zevrant.services.zevrant.oauth2.service.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "users")
 @SequenceGenerator(name="users", initialValue=1, allocationSize=1000)
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users")
-    @Column(name = "ID", updatable = false, nullable = false)
-    private Long ID;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersIdSeq")
+    @Column(name = "id", updatable = false, nullable = false)
+    private Long registrationId;
 
-    @Column(name = "USERNAME")
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "password")
     private String password;
 
     public User() {
     }
 
-    public Long getID() {
-        return ID;
+    public Long getRegistrationId() {
+        return registrationId;
     }
 
     public String getUsername() {

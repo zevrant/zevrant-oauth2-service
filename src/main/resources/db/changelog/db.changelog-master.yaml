@@ -14,12 +14,13 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: USERNAME
+                  name: username
                   type: varchar(255)
                   constraints:
                     nullable: false
+                    unique: true
               - column:
-                  name: PASSWORD
+                  name: password
                   type: varchar(60)
                   constraints:
                     nullable: false
@@ -35,6 +36,7 @@ databaseChangeLog:
             maxValue: 1000
             schemaName: public
             startValue: 1
+            allocationSize: 1
   - changeSet:
       id: 3
       author: zevrant
@@ -43,14 +45,110 @@ databaseChangeLog:
             tableName: REGISTER
             columns:
               - column:
-                  name: registrationCode
-                  type: varchar(20)
+                  name: registration_code
+                  type: varchar(50)
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: expirationDate
-                  type: varchar(10)
+                  name: expiration_date
+                  type: varchar(50)
                   constraints:
                     nullable: false
                     unique: true
+  - changeSet:
+      id: 4
+      author: zevrant
+      changes:
+        - createTable:
+            tableName: token
+            columns:
+              - column:
+                  name: token
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: expiration_date
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: scopes
+            columns:
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: scope
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 5
+      author: zevrant
+      changes:
+        - createTable:
+            tableName: oauth_client_details
+            columns:
+              - column:
+                  name: client_id
+                  type: varchar(256)
+                  constraints:
+                    - primaryKey: true
+                    - nullable: false
+              - column:
+                  name: resource_ids
+                  type: varchar(256)
+              - column:
+                - name: client_secret
+                  type: varchar(256)
+              - column:
+                  name: scope
+                  type: varchar(256)
+              - column:
+                  name: authorized_grant_types
+                  type: varchar(256)
+              - column:
+                  name: web_server_redirect_uri
+                  type: varchar(256)
+              - column:
+                  name: authorities
+                  type: varchar(256)
+              - column:
+                  name: access_token_validity
+                  type: INTEGER
+              - column:
+                  name: refresh_token_validity
+                  type: INTEGER
+              - column:
+                  name: additional_information
+                  type: varchar(4096)
+              - column:
+                  name: autoapprove
+                  type: varchar(356)
+        - sql:
+            sql: INSERT INTO oauth_client_details (client_id, client_secret, scope, authorized_grant_types, authorities, access_token_validity, refresh_token_validity) VALUES ('crmClient1', 'crmSuperSecret', 'ADMIN', 'client_credentials', 'ROLE_CLIENT,ROLE_TRUSTED_CLIENT', 900, 2592000);
+  - changeSet:
+      id: 6
+      author: zevrant
+      changes:
+        - sql:
+            sql: create table oauth_client_token (token_id VARCHAR(256), token FLOAT, authentication_id VARCHAR(256) PRIMARY KEY, user_name VARCHAR(256), client_id VARCHAR(256));
+        - sql:
+            sql: create table oauth_access_token (token_id VARCHAR(256), token FLOAT, authentication_id VARCHAR(256) PRIMARY KEY, user_name VARCHAR(256), client_id VARCHAR(256), authentication FLOAT, refresh_token VARCHAR(256));
+        - sql:
+            sql: create table oauth_refresh_token (token_id VARCHAR(256), token FLOAT, authentication FLOAT);
+        - sql:
+            sql: create table oauth_code (code VARCHAR(256), authentication FLOAT);
+        - sql:
+            sql: create table oauth_approvals (userId VARCHAR(256), clientId VARCHAR(256), scope VARCHAR(256), status VARCHAR(10), expiresAt TIMESTAMP, lastModifiedAt TIMESTAMP);

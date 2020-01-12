@@ -1,5 +1,6 @@
 package net.zevrant.services.zevrant.oauth2.service.entity;
 
+import javax.annotation.sql.DataSourceDefinition;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,7 +8,7 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "REGISTER")
+@Table(name = "register")
 public class Registration {
 
     @Id

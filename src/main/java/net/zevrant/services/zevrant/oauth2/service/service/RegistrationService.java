@@ -35,7 +35,7 @@ public class RegistrationService {
         newUser.setUsername(username);
         newUser = userRepository.save(newUser);
 
-        return newUser != null;
+        return true;
     }
 
     private void verifyRegistration(String registrationCode) {
@@ -55,7 +55,8 @@ public class RegistrationService {
 
     public RegistrationCode indoctrinate() {
         UUID uuid = UUID.randomUUID();
-        Registration code = registrationRepository.save(new Registration(uuid.toString(), LocalDateTime.now().plusDays(1L)));
+        Registration registration = new Registration(uuid.toString(), LocalDateTime.now().plusDays(1L));
+        Registration code = registrationRepository.save(registration);
         return new RegistrationCode(code.getRegistrationCode(), code.getExpirationDate());
     }
 }
