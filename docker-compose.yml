@@ -2,7 +2,7 @@ version: '3.5'
 services:
   zevrant-oauth2-service:
     ports:
-      - "8000:8000"
+      - "9001:9001"
     restart: unless-stopped
     image: zevrant/zevrant-oauth2-service:${VERSION}
     deploy:
