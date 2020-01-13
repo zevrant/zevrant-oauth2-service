@@ -51,6 +51,7 @@ updateVersion:
     - minorVersion=$( expr ${arr[2]} + 1 )
     - aws ssm put-parameter --name zevrant-oauth2-service-VERSION --value ${arr[0]}.${arr[1]}.$minorVersion --type String --overwrite
     - VERSION=${arr[0]}.${arr[1]}.$minorVersion
+    - echo zevrant-oauth2-service-$VERSION
     - git tag zevrant-oauth2-service-$VERSION
 
 deploy:
