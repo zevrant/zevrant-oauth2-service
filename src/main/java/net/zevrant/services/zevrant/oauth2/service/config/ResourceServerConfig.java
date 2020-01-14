@@ -43,7 +43,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.addFilterBefore(new JsonAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
 
         http
-                .authorizeRequests().antMatchers(openPaths).permitAll();
+                .authorizeRequests().antMatchers(openPaths).permitAll()
+            .and().csrf().disable();
         // ... more configuration, e.g. for form login
         http
             .getSharedObject(AuthenticationManagerBuilder.class)

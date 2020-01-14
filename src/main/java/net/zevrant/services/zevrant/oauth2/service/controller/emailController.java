@@ -1,6 +1,7 @@
 package net.zevrant.services.zevrant.oauth2.service.controller;
 
 import net.zevrant.services.zevrant.oauth2.service.rest.request.RegistrationConfig;
+import net.zevrant.services.zevrant.oauth2.service.rest.response.Email;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ import java.util.Properties;
 public class emailController {
 
   @PostMapping
-  public boolean sendEmail(@RequestBody RegistrationConfig config) throws MessagingException {
+  public Email sendEmail(@RequestBody RegistrationConfig config) throws MessagingException {
     // Recipient's email ID needs to be mentioned.
     String to = "gerethd@gmail.com";
 
@@ -73,6 +74,6 @@ public class emailController {
     } catch (MessagingException mex) {
       mex.printStackTrace();
     }
-    return true;
+    return new Email(true);
   }
 }
