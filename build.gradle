@@ -13,7 +13,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 ext {
-	set('springCloudVersion', 'Greenwich.SR1')
+	set('springCloudVersion', 'Hoxton.RELEASE')
 }
 
 repositories {
@@ -27,9 +27,10 @@ repositories {
 	}
 }
 dependencies {
-	implementation 'net.zevrant-services:zevrant-security-common:0.0.37'
+	implementation 'net.zevrant-services:zevrant-security-common:0.0.38'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.2.1.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.liquibase:liquibase-core:3.8.4'

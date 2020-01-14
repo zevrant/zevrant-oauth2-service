@@ -36,9 +36,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         String[] openPaths = null;
         List<String> activeProfiles = Arrays.asList(context.getEnvironment().getActiveProfiles());
         if(activeProfiles.contains("prod")) {
-            openPaths = new String[]{"/authorize", "/register", "/oauth/token"};
+            openPaths = new String[]{"/authorize", "/register", "/oauth/token", "/email"};
         } else {
-            openPaths = new String[]{"/authorize", "/oauth/token", "/register", "/indoctrinate"};
+            openPaths = new String[]{"/authorize", "/oauth/token", "/register", "/indoctrinate", "/email"};
         }
         http.addFilterBefore(new JsonAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
 

@@ -57,8 +57,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     public AuthorizationServerConfig(AuthenticationManager authenticationManager, ZevrantClientDetailsService userProvider,
-                                     @Value("${server.ssl.key-store-password}") String keystorePassword,
-                                     @Value("${server.ssl.key-store}") File keystore,
+                                     @Value("${zevrant.ssl.key-store-password}") String keystorePassword,
+                                     @Value("${zevrant.ssl.key-store}") File keystore,
                                      @Value("${oauth2.keystore.alias}") String keystoreAlias,
                                      DataSource dataSource) {
         this.authenticationManager = authenticationManager;
