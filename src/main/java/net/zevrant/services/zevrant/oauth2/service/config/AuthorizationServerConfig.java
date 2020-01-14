@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.*;
@@ -43,8 +42,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationServerConfig.class);
 
-    private final AuthenticationManager authenticationManager;
-
     private final ZevrantClientDetailsService userProvider;
 
     private final String keystorePassword;
@@ -56,12 +53,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private DataSource dataSource;
 
     @Autowired
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, ZevrantClientDetailsService userProvider,
+    public AuthorizationServerConfig(ZevrantClientDetailsService userProvider,
                                      @Value("${zevrant.ssl.key-store-password}") String keystorePassword,
                                      @Value("${zevrant.ssl.key-store}") File keystore,
                                      @Value("${oauth2.keystore.alias}") String keystoreAlias,
                                      DataSource dataSource) {
-        this.authenticationManager = authenticationManager;
         this.userProvider = userProvider;
         this.keystorePassword = keystorePassword;
         this.keystore = new SecretResource(keystore);
@@ -81,7 +77,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints
                 .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
-                .authenticationManager(authenticationManager)
+                .authenticationManager(new AuthenticationManager(tokenServices()))
                 .tokenEnhancer(new TokenEnhancerChain())
                 .tokenStore(tokenStore());
 

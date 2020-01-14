@@ -9,16 +9,16 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.stereotype.Service;
 
-@Primary
-@Service
 public class AuthenticationManager extends OAuth2AuthenticationManager {
 
-    @Autowired
-    public void setClientDetailsService( ClientDetailsService clientDetailsService) {
+    public AuthenticationManager(ResourceServerTokenServices tokenServices) {
+        this.setTokenService(tokenServices);
+    }
+
+    public void setClientDetailsService(ClientDetailsService clientDetailsService) {
         super.setClientDetailsService(clientDetailsService);
     }
 
-    @Autowired
     public void setTokenService(ResourceServerTokenServices tokenService) {
         super.setTokenServices(tokenService);
     }

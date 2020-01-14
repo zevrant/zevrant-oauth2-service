@@ -1,19 +1,23 @@
-datasource:
-  url: jdbc:postgresql://database-2.cpvhgxlcfvwx.us-east-1.rds.amazonaws.com:5432/oauth2
-  username: zevrant
-  password: ${rds.oauth.password}
-jpa:
-  show-sql: true
-  properties:
-    hibernate:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: local
+  datasource:
+    url: 'jdbc:postgresql://database-2.cpvhgxlcfvwx.us-east-1.rds.amazonaws.com:5432/oauth2'
+    username: 'zevrant'
+    password: ${rds.oauth.password}
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  servlet:
-    ssl:
-      key-store: ${zevrant.ssl.key-store}
-      key-store-type: PKCS12
-      key-store-password: ${ssl.keystore.password}
+  ssl:
+    key-store: ${zevrant.ssl.key-store}
+    key-store-type: PKCS12
+    key-store-password: ${ssl.keystore.password}
 
 oauth2:
   keystore:

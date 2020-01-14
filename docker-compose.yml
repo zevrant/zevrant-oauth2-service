@@ -4,7 +4,7 @@ services:
     ports:
       - "9001:9001"
     restart: unless-stopped
-    image: zevrant/zevrant-oauth2-service:${VERSION}
+    image: zevrant/zevrant-oauth2-service:0.0.10
     deploy:
       placement:
         constraints:
@@ -15,8 +15,8 @@ services:
       AWS_SECRET_ACCESS_KEY:
       AWS_DEFAULT_REGION: 'us-east-1'
       AWS_DEFAULT_OUTPUT: json
-networks:
-  default:
-    external:
-      name: microservices
+#networks:
+#  default:
+#    external:
+#      name: microservices
 

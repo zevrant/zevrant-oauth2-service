@@ -22,13 +22,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private UserProvider userProvider;
     private ConfigurableApplicationContext context;
     private ZevrantOauthResponseClient responseClient;
-    private AuthenticationManager authenticationManager;
-    public ResourceServerConfig(UserProvider userProvider, ConfigurableApplicationContext context, ZevrantOauthResponseClient responseClient,
-                                AuthenticationManager authenticationManager) {
+    public ResourceServerConfig(UserProvider userProvider, ConfigurableApplicationContext context, ZevrantOauthResponseClient responseClient) {
         this.userProvider = userProvider;
         this.context = context;
         this.responseClient = responseClient;
-        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -40,7 +37,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         } else {
             openPaths = new String[]{"/authorize", "/oauth/token", "/register", "/indoctrinate", "/email"};
         }
-        http.addFilterBefore(new JsonAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
 
         http
                 .authorizeRequests().antMatchers(openPaths).permitAll()
