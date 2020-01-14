@@ -38,3 +38,8 @@ logging:
   level:
     root: ERROR
     net.zevrant.services.zevrant.oauth2.service: ERROR
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://zevrant-services.net:7446/eureka/
