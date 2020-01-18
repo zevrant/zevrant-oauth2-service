@@ -27,9 +27,9 @@ stages:
   - deploy
   - updateVersion
 
-sonarScan:
-  stage: sonarScan
-  script: bash gradlew sonar
+# sonarScan:
+#   stage: sonarScan
+#   script: bash gradlew sonar
 
 test:
   stage: test
