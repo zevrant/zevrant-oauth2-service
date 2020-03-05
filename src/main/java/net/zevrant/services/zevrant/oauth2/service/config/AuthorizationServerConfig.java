@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.*;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -104,6 +105,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         KeyStoreKeyFactory keyStoreKeyFactory =
                 new KeyStoreKeyFactory(keystore, keystorePassword.toCharArray());
         converter.setKeyPair(keyStoreKeyFactory.getKeyPair(keystoreAlias));
+        logger.info("Set JWT signing key to: {}", converter.getKey());
         return converter;
     }
 

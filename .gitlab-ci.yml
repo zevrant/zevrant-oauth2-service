@@ -34,6 +34,8 @@ stages:
 test:
   stage: test
   script: bash gradlew test
+  tags:
+    - zevrant
 
 imageBuild:
   stage: imageBuild

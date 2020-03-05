@@ -93,3 +93,39 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 5
+      author: zevrant
+      changes:
+        - createTable:
+            tableName: roleAssociation
+            columns:
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: roleName
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: roleDesc
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 6
+      author: zevrant
+      changes:
+        - sql:
+            sql: insert into roles("roleName", "roleDesc") values ('prints', 'Allows users to access prints');
