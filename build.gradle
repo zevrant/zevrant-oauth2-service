@@ -36,7 +36,6 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core:3.8.4'
 	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
 	implementation 'com.h2database:h2:1.4.200'
-//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	runtimeOnly 'org.postgresql:postgresql'
