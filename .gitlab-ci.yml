@@ -39,7 +39,7 @@ imageBuild:
   stage: imageBuild
   script:
     - 'bash gradlew assemble -PprojVersion=$VERSION'
-    - 'docker build -t zevrant/zevrant-oauth2-service:latest -t zevrant/zevrant-oauth2-service:$VERSION .'
+    - 'docker build -t zevrant/zevrant-oauth2-service:latest -t zevrant/zevrant-oauth2-service:$VERSION --no-cache .'
     - 'docker push zevrant/zevrant-oauth2-service:latest'
     - 'docker push zevrant/zevrant-oauth2-service:$VERSION'
 
