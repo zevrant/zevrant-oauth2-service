@@ -55,7 +55,7 @@ management:
 eureka:
   client:
     register-with-eureka: true
-    fetch-registry: false
+    fetch-registry: true
     healthcheck:
       enabled: true
     serviceUrl:
