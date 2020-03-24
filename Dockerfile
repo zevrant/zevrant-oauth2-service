@@ -20,12 +20,11 @@ RUN mkdir ~/.aws; echo "[default]" > ~/.aws/config; echo "region = us-east-1" >>
 CMD mkdir -p ~/.aws; echo "[default]" > ~/.aws/credentials\
  && echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials\
  && echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials\
-# && IFS='\ '\
-# && IP=$(hostname -I)\
-# && echo $IP\
-# && read -ra arr <<< "$IP"\
-# && echo ${arr[0]}\
-# && export IP_ADDRESS=${arr[0]}\
-# && echo $IP_ADDRESS \
- && ifconfig eth0\
+ && IFS=' '\
+ && IP=$(ifconfig eth0 | grep "inet ")\
+ && echo $IP\
+ && arr=($IP)  \
+ && echo ${arr[1]}\
+ && export IP_ADDRESS=${arr[1]}\
+ && echo $IP_ADDRESS \
  && java -jar -Dspring.profiles.active=prod -Deureka.instance.hostname=$IP_ADDRESS /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
