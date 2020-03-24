@@ -1,4 +1,4 @@
-FROM zevrant/zevrant-centos-base:latest
+FROM zevrant/zevrant-ubuntu-base:latest
 
 EXPOSE 8000
 
