@@ -13,27 +13,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-server:
-  ssl:
-    key-store: ${zevrant.ssl.key-store}
-    key-store-type: PKCS12
-    key-store-password: ${ssl.keystore.password}
-
-oauth2:
-  keystore:
-    alias: 1
-
-context:
-  initializer:
-    classes: net.zevrant.services.security.common.secrets.management.services.EncryptedPropertyContextInitializer
-
-zevrant:
-  bucketName: 'zevrant-resources'
-  keystore: 'prod/ssl/keystore.p12'
-  ssl:
-    key-store: /storage/keys/zevrant-services.p12
-    key-store-password: ${ssl.keystore.password}
-
 logging:
   level:
     root: ERROR
@@ -43,6 +22,3 @@ eureka:
   client:
     serviceUrl:
       defaultZone:  http://172.16.238.10:8999/eureka/
-  instance:
-    secure-port: 9001
-    secure-port-enabled: true
