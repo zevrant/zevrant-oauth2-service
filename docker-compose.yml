@@ -1,9 +1,6 @@
 version: '3.5'
 services:
   zevrant-oauth2-service:
-    networks:
-      zevrant-discovery-service_microservices:
-        ipv4_address: 172.16.238.0
     ports:
       - "9001:9001"
     restart: unless-stopped
@@ -19,7 +16,7 @@ services:
       AWS_DEFAULT_REGION: 'us-east-1'
       AWS_DEFAULT_OUTPUT: json
 networks:
-  bridge:
+  default:
     external:
       name: zevrant-discovery-service_microservices
 
