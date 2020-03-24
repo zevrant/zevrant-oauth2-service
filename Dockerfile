@@ -21,7 +21,7 @@ CMD mkdir -p ~/.aws; echo "[default]" > ~/.aws/credentials\
  && echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials\
  && echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials\
  && IFS=' '\
- && IP=$(ifconfig eth0 | grep "inet ")\
+ && IP=$(ifconfig eth1 | grep "inet ")\
  && export IP_ADDRESS=$(echo $IP | cut -d' ' -f2)\
  && echo $IP_ADDRESS \
  && java -jar -Dspring.profiles.active=prod -Deureka.instance.hostname=$IP_ADDRESS /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
