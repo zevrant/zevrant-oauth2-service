@@ -56,4 +56,4 @@ updateVersion:
 deploy:
   stage: deploy
   script:
-    - VERSION=$VERSION AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID docker stack deploy --with-registry-auth --compose-file docker-compose.yml zevrant-oauth2-service
+    - VERSION=$VERSION AWS_SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY AWS_ACCESS_KEY_ID=$ACCESS_KEY_ID docker stack deploy --with-registry-auth --compose-file docker-compose.yml zevrant-oauth2-service
