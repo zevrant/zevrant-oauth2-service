@@ -11,8 +11,8 @@ services:
           - node.role == worker
     environment:
       VERSION:
-      AWS_ACCESS_KEY_ID: AKIA2RW3K76J2J7GULPY
-      AWS_SECRET_ACCESS_KEY: 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
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
       AWS_DEFAULT_REGION: 'us-east-1'
       AWS_DEFAULT_OUTPUT: json
 networks:
