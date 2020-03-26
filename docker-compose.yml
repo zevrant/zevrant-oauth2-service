@@ -1,6 +1,9 @@
 version: '3.5'
 services:
   zevrant-oauth2-service:
+    networks:
+      zevrant-discovery-service_microservices:
+        ipv4_address: 172.16.238.11
     ports:
       - "9001:9001"
     restart: unless-stopped
