@@ -13,12 +13,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-server:
-  ssl:
-    key-store: ${zevrant.ssl.key-store}
-    key-store-type: PKCS12
-    key-store-password: ${ssl.keystore.password}
-
 oauth2:
   keystore:
     alias: 1
