@@ -31,10 +31,9 @@ logging:
 
 eureka:
   instance:
-    non-secure-port-enabled: false
-    secure-port-enabled: true
-    secure-port: ${server.port}
-    home-page-url: https://${eureka.instance.hostname}:${server.port}/
+    prefer-ip-address: true
+    hostname: ${IP_ADDRESS}
+    ip-address: ${IP_ADDRESS}
   client:
     serviceUrl:
       defaultZone:  http://172.16.238.10:8999/eureka/
