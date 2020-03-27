@@ -33,6 +33,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,25 +46,25 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private final ZevrantClientDetailsService userProvider;
 
-    private final String keystorePassword;
-
-    private final String keystoreAlias;
-
-    private final SecretResource keystore;
+    private final AuthenticationManager authenticationManager;
 
     private DataSource dataSource;
 
+    private TokenStore tokenStore;
+
+    private JwtAccessTokenConverter accessTokenConverter;
+
     @Autowired
     public AuthorizationServerConfig(ZevrantClientDetailsService userProvider,
-                                     @Value("${zevrant.ssl.key-store-password}") String keystorePassword,
-                                     @Value("${zevrant.ssl.key-store}") File keystore,
-                                     @Value("${oauth2.keystore.alias}") String keystoreAlias,
-                                     DataSource dataSource) {
+                                     DataSource dataSource,
+                                     AuthenticationManager authenticationManager,
+                                     TokenStore tokenStore,
+                                     JwtAccessTokenConverter accessTokenConverter) {
         this.userProvider = userProvider;
-        this.keystorePassword = keystorePassword;
-        this.keystore = new SecretResource(keystore);
-        this.keystoreAlias = keystoreAlias;
         this.dataSource = dataSource;
+        this.authenticationManager = authenticationManager;
+        this.tokenStore = tokenStore;
+        this.accessTokenConverter = accessTokenConverter;
     }
 
     @Override
@@ -77,10 +78,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints
-                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
-                .authenticationManager(new AuthenticationManager(tokenServices()))
+                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
+                .authenticationManager(authenticationManager)
                 .tokenEnhancer(new TokenEnhancerChain())
-                .tokenStore(tokenStore());
+                .tokenStore(tokenStore)
+                .accessTokenConverter(accessTokenConverter)
+                .userDetailsService(userProvider);
 
     }
 
@@ -89,34 +92,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public PasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(31);
         logger.info("Successfullly tested encoder {}", encoder.encode("TESTPassword"));
-
         return encoder;
 
     }
 
-    @Bean
-    public TokenStore tokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
-    }
 
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        KeyStoreKeyFactory keyStoreKeyFactory =
-                new KeyStoreKeyFactory(keystore, keystorePassword.toCharArray());
-        converter.setKeyPair(keyStoreKeyFactory.getKeyPair(keystoreAlias));
-        logger.info("Set JWT signing key to: {}", converter.getKey());
-        return converter;
-    }
 
-    @Bean
-    @Primary
-    public DefaultTokenServices tokenServices() {
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
-        defaultTokenServices.setSupportRefreshToken(true);
-        return defaultTokenServices;
-    }
 
     @Bean
     protected AuthorizationCodeServices authorizationCodeServices() {

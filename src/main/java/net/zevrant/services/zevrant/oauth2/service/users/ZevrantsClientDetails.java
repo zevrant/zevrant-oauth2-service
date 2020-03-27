@@ -1,11 +1,12 @@
 package net.zevrant.services.zevrant.oauth2.service.users;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
 import java.util.*;
 
-public class ZevrantsClientDetails implements ClientDetails {
+public class ZevrantsClientDetails implements ClientDetails, UserDetails {
 
     private String clientId;
     private String clientSecret;
@@ -75,6 +76,36 @@ public class ZevrantsClientDetails implements ClientDetails {
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
         return Collections.unmodifiableCollection(grantedAuthorities);
+    }
+
+    @Override
+    public String getPassword() {
+        return clientSecret;
+    }
+
+    @Override
+    public String getUsername() {
+        return clientId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
