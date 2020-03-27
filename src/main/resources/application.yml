@@ -15,8 +15,6 @@ spring:
   application:
     name: zevrant-oauth2-service
 server:
-
-#    key-store-password: ${ssl.keystore.password}
   port: 9001
   servlet:
     context-path: /${spring.application.name}
