@@ -1,5 +1,7 @@
 package net.zevrant.services.zevrant.oauth2.service.service;
 
+import java.util.Optional;
+import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +19,11 @@ public class ZevrantClientDetailsService implements ClientDetailsService, UserDe
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        return convertUser(userRepository.findByUsername(clientId));
+        Optional<User> userProxy = userRepository.findByUsername(clientId);
+        if(userProxy.isEmpty()){
+            throw new UserNotFoundException("User " + clientId + " not found");
+        }
+        return convertUser(userProxy.get());
     }
 
     private ClientDetails convertUser(User user) {
@@ -26,6 +32,6 @@ public class ZevrantClientDetailsService implements ClientDetailsService, UserDe
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) convertUser(userRepository.findByUsername(username));
+        return (UserDetails) loadClientByClientId(username);
     }
 }

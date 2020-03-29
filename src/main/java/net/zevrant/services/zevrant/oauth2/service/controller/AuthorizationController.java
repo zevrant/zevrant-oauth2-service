@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping("/token")
 public class AuthorizationController {
 
     private TokenService tokenService;
@@ -23,10 +23,10 @@ public class AuthorizationController {
         this.tokenService = tokenService;
     }
 
-    @PostMapping("/token")
-    public TokenResponse login(LoginRequest loginRequest) {
+    @PostMapping
+    public TokenResponse login(@RequestHeader String client_id, @RequestHeader String client_secret) {
         try {
-            OAuth2AccessToken oAuth2AccessToken = tokenService.GetAccessToken(loginRequest.getClient_id(), loginRequest.getClientSecret());
+            OAuth2AccessToken oAuth2AccessToken = tokenService.GetAccessToken(client_id, client_secret);
             TokenResponse response = new TokenResponse();
             response.setAccessToken(oAuth2AccessToken.getValue());
             response.setExpiresIn(oAuth2AccessToken.getExpiresIn());
@@ -34,7 +34,7 @@ public class AuthorizationController {
             response.setTokenType(oAuth2AccessToken.getTokenType());
             return response;
         } catch (ClientRegistrationException ex) {
-            throw new UserNotFoundException("User " + loginRequest.getClient_id() + " not found");
+            throw new UserNotFoundException("User " + client_id + " not found");
         }
     }
 

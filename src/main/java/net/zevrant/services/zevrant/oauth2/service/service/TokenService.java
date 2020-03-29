@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import net.zevrant.services.zevrant.oauth2.service.config.AuthenticationManager;
 import net.zevrant.services.zevrant.oauth2.service.config.SecretResource;
+import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
 import net.zevrant.services.zevrant.oauth2.service.entity.Token;
@@ -72,10 +73,13 @@ public class TokenService {
                 .compact();
 
         OAuth2Request request = new OAuth2Request(token);
-        User details = userRepository.findByUsername(clientId);
+        Optional<User> detailsProxy = userRepository.findByUsername(clientId);
+        if(detailsProxy.isEmpty()) {
+            throw new UserNotFoundException("User " + clientId + " not found");
+        }
+        User details = detailsProxy.get();
         OAuth2Authentication authentication = new OAuth2Authentication(request, new ClientDetails(details.getUsername(), details.getPassword()));
-        String encryptedSecret = passwordEncoder.encode(clientSecret);
-        if(!encryptedSecret.equals(details.getPassword())){
+        if(!passwordEncoder.matches(clientSecret, details.getPassword())){
             return null;
         }
         authentication.setAuthenticated(true);

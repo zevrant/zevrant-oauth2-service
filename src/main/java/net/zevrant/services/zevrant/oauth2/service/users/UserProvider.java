@@ -40,11 +40,12 @@ public class UserProvider implements ClientDetailsService {
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        User user = userRepository.findByUsername(clientId);
-        if(user == null) {
+        Optional<User> userProxy = userRepository.findByUsername(clientId);
+        if(userProxy.isPresent()) {
             logger.error("Username {} not found", clientId);
             throw new ClientRegistrationException("Username not found");
         }
+        User user = userProxy.get();
         return new ZevrantsClientDetails(user.getUsername(), user.getPassword());
     }
 

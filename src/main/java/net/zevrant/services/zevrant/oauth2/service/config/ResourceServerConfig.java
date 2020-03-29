@@ -10,7 +10,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +40,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private ZevrantOauthResponseClient responseClient;
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
+    private String[] openPaths;
     public ResourceServerConfig(UserProvider userProvider, ConfigurableApplicationContext context, ZevrantOauthResponseClient responseClient,
                                 PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.userProvider = userProvider;
@@ -45,18 +48,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         this.responseClient = responseClient;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        List<String> activeProfiles = Arrays.asList(context.getEnvironment().getActiveProfiles());
+        if(activeProfiles.contains("prod")) {
+            openPaths = new String[]{"/authorize", "/token", "/register", "/email"};
+        } else {
+            openPaths = new String[]{"/authorize", "/token", "/register", "/indoctrinate", "/email"};
+        }
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        String[] openPaths = null;
-        List<String> activeProfiles = Arrays.asList(context.getEnvironment().getActiveProfiles());
-        if(activeProfiles.contains("prod")) {
-            openPaths = new String[]{"/authorize", "/register", "/oauth/token", "/email"};
-        } else {
-            openPaths = new String[]{"/authorize", "/oauth/token", "/register", "/indoctrinate", "/email"};
-        }
-
         http
                 .authorizeRequests().antMatchers(openPaths).permitAll()
             .and().csrf().disable();
@@ -66,9 +67,15 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .userDetailsService(new ZevrantClientDetailsService(userProvider))
             .passwordEncoder(passwordEncoder);
 
-        http
-                .addFilterBefore(new OAuthJdbcFilter(userProvider, authenticationManager), AnonymousAuthenticationFilter.class);
+//        http
+//                .addFilterBefore(new OAuthJdbcFilter(userProvider, authenticationManager), AnonymousAuthenticationFilter.class);
+        super.configure(http);
     }
+
+//    @Override
+//    public void configure(WebSecurity security) {
+//        security.ignoring().mvcMatchers(openPaths);
+//    }
 
     private static class OAuthJdbcFilter implements Filter {
 

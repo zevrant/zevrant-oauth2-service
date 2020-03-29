@@ -36,11 +36,6 @@ context:
   initializer:
     classes: net.zevrant.services.security.common.secrets.management.services.EncryptedPropertyContextInitializer
 
-security:
-  oauth2:
-    client:
-      access-token-uri: /oauth/token
-
 management:
   endpoints:
     web:

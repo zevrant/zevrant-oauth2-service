@@ -65,7 +65,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: token
-                  type: varchar(50)
+                  type: varchar(2048)
                   constraints:
                     primaryKey: true
                     nullable: false
