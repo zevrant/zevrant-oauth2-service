@@ -38,6 +38,11 @@ public class AuthorizationController {
         }
     }
 
+    @PostMapping("/request_body")
+    public TokenResponse login(@RequestBody LoginRequest loginRequest) {
+        return login(loginRequest.getClient_id(), loginRequest.getClientSecret());
+    }
+
     @GetMapping
     public AuthorizationResponse getAuthorization() {
         SecurityContext context = SecurityContextHolder.getContext();

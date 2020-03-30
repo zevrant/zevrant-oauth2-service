@@ -34,4 +34,6 @@ public class ZevrantClientDetailsService implements ClientDetailsService, UserDe
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return (UserDetails) loadClientByClientId(username);
     }
+
+
 }

@@ -64,24 +64,11 @@ public class TokenService {
     }
 
     public OAuth2AccessToken GetAccessToken(String clientId,  String clientSecret) {
-        String token = Jwts.builder()
-                .setClaims(new HashMap<>())
-                .setSubject(clientId)
-                .setIssuedAt(new Date())
-                .setExpiration(Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)))
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
-
-        OAuth2Request request = new OAuth2Request(token);
-        Optional<User> detailsProxy = userRepository.findByUsername(clientId);
-        if(detailsProxy.isEmpty()) {
-            throw new UserNotFoundException("User " + clientId + " not found");
-        }
-        User details = detailsProxy.get();
-        OAuth2Authentication authentication = new OAuth2Authentication(request, new ClientDetails(details.getUsername(), details.getPassword()));
-        if(!passwordEncoder.matches(clientSecret, details.getPassword())){
+        Optional<OAuth2Authentication> authenticationProxy = authenticate(clientId, clientSecret);
+        if(authenticationProxy.isEmpty()){
             return null;
         }
+        OAuth2Authentication authentication = authenticationProxy.get();
         authentication.setAuthenticated(true);
         OAuth2AccessToken accessToken = tokenServices.createAccessToken(authentication);
         accessToken = accessTokenConverter.enhance(accessToken, authentication);
@@ -93,9 +80,29 @@ public class TokenService {
         return accessToken;
     }
 
+    private Optional<OAuth2Authentication> authenticate(String clientId, String clientSecret) {
+        OAuth2Request request = new OAuth2Request(clientId);
+        Optional<User> detailsProxy = userRepository.findByUsername(clientId);
+        if(detailsProxy.isEmpty()) {
+            throw new UserNotFoundException("User " + clientId + " not found");
+        }
+        User details = detailsProxy.get();
+        OAuth2Authentication authentication = new OAuth2Authentication(request, new ClientDetails(details.getUsername(), details.getPassword()));
+        if(!passwordEncoder.matches(clientSecret, details.getPassword())){
+            return Optional.empty();
+        }
+        return Optional.of(authentication);
+    }
+
     public LocalDateTime isAuthorized(String token) {
         Optional<Token> tokenDb = tokenRepository.findByToken(token);
         return tokenDb.map(Token::getExpirationDate).orElse(null);
+    }
+
+    public String getUsername(String token) {
+        Optional<Token> tokenProxy =  tokenRepository.findByToken(token);
+        if(tokenProxy.isEmpty()){ throw new UserNotFoundException("Cannot find user for token"); }
+        return tokenProxy.get().getUsername();
     }
 
 

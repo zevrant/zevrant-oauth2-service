@@ -18,9 +18,9 @@ public class UserController {
         this.tokenService = tokenService;
     }
 
-    @GetMapping("/token")
-    public UsernameResponse getUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return new UsernameResponse(authentication.getName());
+    @GetMapping("/username")
+    public UsernameResponse getUsername(@RequestHeader String authorization) {
+
+        return new UsernameResponse(tokenService.getUsername(authorization.split(" ")[1]));
     }
 }
