@@ -13,4 +13,6 @@ public interface TokenRepository extends JpaRepository<Token, String> {
     Optional<Token> findByTokenAndUsername(String token, String username);
 
     Optional<Token> findByToken(String token);
+
+    int deleteTokenByToken(String token);
 }

@@ -4,6 +4,7 @@ import com.amazonaws.util.Base64;
 import com.nimbusds.jwt.JWTClaimsSet;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import javax.transaction.Transactional;
 import net.zevrant.services.zevrant.oauth2.service.config.AuthenticationManager;
 import net.zevrant.services.zevrant.oauth2.service.config.SecretResource;
 import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.UserNotFoundException;
@@ -63,6 +64,7 @@ public class TokenService {
         secret = Base64.encodeAsString(keyStoreKeyFactory.getKeyPair(keystoreAlias).getPrivate().getEncoded());
     }
 
+    @Transactional
     public OAuth2AccessToken GetAccessToken(String clientId,  String clientSecret) {
         Optional<OAuth2Authentication> authenticationProxy = authenticate(clientId, clientSecret);
         if(authenticationProxy.isEmpty()){
@@ -105,5 +107,8 @@ public class TokenService {
         return tokenProxy.get().getUsername();
     }
 
-
+    @Transactional
+    public boolean logout(String token) {
+        return tokenRepository.deleteTokenByToken(token) > 0;
+    }
 }

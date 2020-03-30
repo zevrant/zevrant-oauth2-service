@@ -50,4 +50,9 @@ public class AuthorizationController {
         response.setAuthorized(context.getAuthentication().isAuthenticated());
         return response;
     }
+
+    @DeleteMapping
+    public boolean logout(@RequestHeader String authorization) {
+        return tokenService.logout(authorization.split(" ")[1]);
+    }
 }
