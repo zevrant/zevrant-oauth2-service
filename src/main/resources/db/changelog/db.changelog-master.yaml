@@ -129,3 +129,40 @@ databaseChangeLog:
       changes:
         - sql:
             sql: insert into roles("roleName", "roleDesc") values ('prints', 'Allows users to access prints');
+  - changeSet:
+      id: 7
+      author: zevrant
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: username
+            baseTableName: token
+            baseTableSchemaName: public
+            constraintName: tokenUsernameForeignKey
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: username
+            referencedTableName: USERS
+            referencedTableSchemaName: public
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: username
+            baseTableName: roleAssociation
+            baseTableSchemaName: public
+            constraintName: rolesUsernameForeignKey
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: username
+            referencedTableName: USERS
+            referencedTableSchemaName: public
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: username
+            baseTableName: scopes
+            baseTableSchemaName: public
+            constraintName: scopesUsernameForeignKey
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: username
+            referencedTableName: USERS
+            referencedTableSchemaName: public
+            validate: true
