@@ -2,8 +2,7 @@ version: '3.5'
 services:
   zevrant-oauth2-service:
     networks:
-      microservices:
-        ipv4_address: 172.16.238.11
+      - microservices
       - secret
     ports:
       - "9001:9001"
