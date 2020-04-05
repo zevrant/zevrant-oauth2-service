@@ -1,18 +1,3 @@
-spring:
-  main:
-    allow-bean-definition-overriding: true
-  profiles:
-    active: local
-  datasource:
-    url: 'jdbc:postgresql://database-2.cpvhgxlcfvwx.us-east-1.rds.amazonaws.com:5432/oauth2'
-    username: 'zevrant'
-    password: ${rds.oauth.password}
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-
 oauth2:
   keystore:
     alias: 1
