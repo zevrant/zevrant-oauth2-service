@@ -19,6 +19,9 @@ services:
       AWS_DEFAULT_REGION: 'us-east-1'
       AWS_DEFAULT_OUTPUT: json
   zevrant-oauth2-service-db:
+    networks:
+      secret:
+        ipv4_address: 173.16.238.1
     volumes:
       - /storage/keys/db/oauth2:/storage/keys/db/oauth2
     ports:
@@ -33,4 +36,12 @@ networks:
   microservices:
     external:
       name: zevrant-discovery-service_microservices
+  secret:
+    # use the bridge driver, but enable IPv6
+    driver: overlay
+    ipam:
+      driver: default
+      config:
+        - subnet: 173.16.238.0/30
+        gateway: 173.16.238.0
 
