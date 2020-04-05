@@ -39,9 +39,9 @@ networks:
   secret:
     # use the bridge driver, but enable IPv6
     driver: overlay
+    attachable: true
     ipam:
       driver: default
       config:
-        subnet: 173.16.238.0/30
-        gateway: 173.16.238.0
+        - subnet: 173.16.238.0/30
 
