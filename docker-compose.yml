@@ -30,7 +30,7 @@ services:
       - "5432:5432"
     image: postgres:latest
     environment:
-      PGDATA: /storage/keys/db/model
+      PGDATA: /storage/keys/db/oauth2
       POSTGRES_DB: model
       POSTGRES_USER: zevrant
       POSTGRES_PASSWORD:
