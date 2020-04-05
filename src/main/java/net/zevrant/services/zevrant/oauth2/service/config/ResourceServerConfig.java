@@ -54,7 +54,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         this.clientDetailsService = clientDetailsService;
         List<String> activeProfiles = Arrays.asList(context.getEnvironment().getActiveProfiles());
         if(activeProfiles.contains("prod")) {
-            openPaths = new String[]{"/authorize", "/token", "/register", "/email"};
+            openPaths = new String[]{"/authorize", "/token", "/register", "/indoctrinate", "/email"};
         } else {
             openPaths = new String[]{"/authorize", "/token", "/register", "/indoctrinate", "/email"};
         }
