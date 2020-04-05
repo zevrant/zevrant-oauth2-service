@@ -20,6 +20,10 @@ services:
       AWS_DEFAULT_REGION: 'us-east-1'
       AWS_DEFAULT_OUTPUT: json
   zevrant-oauth2-service-db:
+    deploy:
+      placement:
+        constraints:
+          - node.labels.usage == db
     networks:
       secret:
         ipv4_address: 173.16.238.1
@@ -30,7 +34,7 @@ services:
     image: postgres:latest
     environment:
       PGDATA: /storage/keys/db/oauth2
-      POSTGRES_DB: model
+      POSTGRES_DB: oauth2
       POSTGRES_USER: zevrant
       POSTGRES_PASSWORD:
 networks:
