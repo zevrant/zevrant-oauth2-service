@@ -4,9 +4,11 @@ services:
     networks:
       microservices:
         ipv4_address: 172.16.238.11
+      - secret
     ports:
       - "9001:9001"
-    restart: unless-stopped
+    depends_on:
+      - zevrant-oauth2-service-db
     image: zevrant/zevrant-oauth2-service:${VERSION}
     deploy:
       placement:
