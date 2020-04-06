@@ -61,4 +61,4 @@ deploy:
     - SECRET=$(echo $SECRET | jq .SecretString )
     - chrlen=$(expr ${#SECRET} - 1)
     - PASSWORD=$(echo $SECRET | cut -c2-$chrlen)
-    - POSTGRES_PASSWORD=$PASSWORD VERSION=$VERSION AWS_SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY AWS_ACCESS_KEY_ID=$ACCESS_KEY_ID docker stack deploy --with-registry-auth --compose-file docker-compose.yml zevrant-oauth2-service
+    - POSTGRES_ROOT_PASSWORD=$PASSWORD VERSION=$VERSION AWS_SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY AWS_ACCESS_KEY_ID=$ACCESS_KEY_ID docker stack deploy --with-registry-auth --compose-file docker-compose.yml zevrant-oauth2-service
