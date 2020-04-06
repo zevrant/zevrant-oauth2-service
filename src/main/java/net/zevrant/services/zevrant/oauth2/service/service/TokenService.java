@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import javax.transaction.Transactional;
 import net.zevrant.services.zevrant.oauth2.service.config.AuthenticationManager;
 import net.zevrant.services.zevrant.oauth2.service.config.SecretResource;
+import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.IncorrectPasswordException;
 import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
@@ -91,7 +92,7 @@ public class TokenService {
         User details = detailsProxy.get();
         OAuth2Authentication authentication = new OAuth2Authentication(request, new ClientDetails(details.getUsername(), details.getPassword()));
         if(!passwordEncoder.matches(clientSecret, details.getPassword())){
-            return Optional.empty();
+            throw new IncorrectPasswordException("Password for " + clientId + " does not match");
         }
         return Optional.of(authentication);
     }
