@@ -57,7 +57,7 @@ updateVersion:
 deploy:
   stage: deploy
   script:
-    - SECRET=$(aws secretsmanager get-secret-value --secret-id /prod/rds/model/password --region us-east-1)
+    - SECRET=$(aws secretsmanager get-secret-value --secret-id /prod/rds/oauth2/password --region us-east-1)
     - SECRET=$(echo $SECRET | jq .SecretString )
     - chrlen=$(expr ${#SECRET} - 1)
     - PASSWORD=$(echo $SECRET | cut -c2-$chrlen)
