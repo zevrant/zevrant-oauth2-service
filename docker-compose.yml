@@ -26,7 +26,7 @@ services:
           - node.labels.usage == db
     networks:
       secret:
-        ipv4_address: 173.16.238.1
+        ipv4_address: 173.16.238.12
     volumes:
       - /storage/keys/db/oauth2:/storage/keys/db/oauth2
     ports:
