@@ -50,6 +50,10 @@ dependencyManagement {
 	}
 }
 
+jacoco {
+	toolVersion = '0.8.5'
+}
+
 jacocoTestReport {
 	reports {
 		xml.enabled true
@@ -60,5 +64,7 @@ sonarqube {
 	properties {
 		property 'sonar.projectName', 'zevrant-oauth2-service'
 		property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+		property "sonar.buildbreaker.skip" , "false"
+		property "sonar.exclusions", "**/config/*,**/entity,**/ZevrantOauth2ServiceApplication.java,**/rest/**"
 	}
 }
