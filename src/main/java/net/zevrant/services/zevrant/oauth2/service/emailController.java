@@ -1,4 +1,4 @@
-package net.zevrant.services.zevrant.oauth2.service.controller;
+package net.zevrant.services.zevrant.oauth2.service;
 
 import net.zevrant.services.zevrant.oauth2.service.rest.request.RegistrationConfig;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.Email;
@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;

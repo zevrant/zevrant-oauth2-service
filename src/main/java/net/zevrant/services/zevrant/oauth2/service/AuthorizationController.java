@@ -1,6 +1,6 @@
-package net.zevrant.services.zevrant.oauth2.service.controller;
+package net.zevrant.services.zevrant.oauth2.service;
 
-import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.UserNotFoundException;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.LoginRequest;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.AuthorizationResponse;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.TokenResponse;

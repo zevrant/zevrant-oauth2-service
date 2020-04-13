@@ -1,13 +1,5 @@
 package net.zevrant.services.zevrant.oauth2.service.filter;
 
-import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import net.zevrant.services.zevrant.oauth2.service.config.AuthenticationManager;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
 import net.zevrant.services.zevrant.oauth2.service.users.UserProvider;
@@ -19,6 +11,10 @@ import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 public class OAuthJdbcFilter implements Filter {
 

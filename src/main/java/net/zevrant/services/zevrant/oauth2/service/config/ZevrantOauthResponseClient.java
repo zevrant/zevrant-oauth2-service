@@ -3,7 +3,6 @@ package net.zevrant.services.zevrant.oauth2.service.config;
 
 import net.zevrant.services.zevrant.oauth2.service.entity.Token;
 import net.zevrant.services.zevrant.oauth2.service.repository.TokenRepository;
-import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;

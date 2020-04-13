@@ -1,40 +1,29 @@
 package net.zevrant.services.zevrant.oauth2.service.service;
 
 import com.amazonaws.util.Base64;
-import com.nimbusds.jwt.JWTClaimsSet;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import javax.transaction.Transactional;
 import net.zevrant.services.zevrant.oauth2.service.config.AuthenticationManager;
 import net.zevrant.services.zevrant.oauth2.service.config.SecretResource;
-import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.IncorrectPasswordException;
-import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
 import net.zevrant.services.zevrant.oauth2.service.entity.Token;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.IncorrectPasswordException;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.repository.TokenRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
-import net.zevrant.services.zevrant.oauth2.service.users.UserProvider;
-import net.zevrant.services.zevrant.oauth2.service.users.ZevrantsClientDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
-import org.springframework.security.oauth2.server.resource.authentication.JwtBearerTokenAuthenticationConverter;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import javax.transaction.Transactional;
+import java.io.File;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Optional;
 
 @Service

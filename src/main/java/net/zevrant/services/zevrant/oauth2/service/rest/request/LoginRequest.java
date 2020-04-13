@@ -1,7 +1,5 @@
 package net.zevrant.services.zevrant.oauth2.service.rest.request;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-
 public class LoginRequest {
 
     private String grant_type;

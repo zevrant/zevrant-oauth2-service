@@ -71,8 +71,13 @@ sonarqube {
 }
 
 testSets {
-	integrationTest { dirName = 'integration-test' }
+	integrationTest { dirName = 'integrationTest' }
 }
+
+integrationTest {
+	useJUnitPlatform ()
+}
+
 check.dependsOn integrationTest
 integrationTest.dependsOn test
 jacocoTestReport.dependsOn integrationTest

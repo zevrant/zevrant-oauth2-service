@@ -1,6 +1,5 @@
-package net.zevrant.services.zevrant.oauth2.service.controller;
+package net.zevrant.services.zevrant.oauth2.service;
 
-import net.zevrant.services.zevrant.oauth2.service.repository.RegistrationRepository;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.RegistrationCode;
 import net.zevrant.services.zevrant.oauth2.service.service.RegistrationService;
 import org.springframework.web.bind.annotation.GetMapping;

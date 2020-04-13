@@ -1,6 +1,5 @@
 package net.zevrant.services.zevrant.oauth2.service.entity;
 
-import javax.annotation.sql.DataSourceDefinition;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
