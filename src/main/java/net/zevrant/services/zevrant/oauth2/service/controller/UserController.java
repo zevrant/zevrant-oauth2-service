@@ -1,4 +1,4 @@
-package net.zevrant.services.zevrant.oauth2.service;
+package net.zevrant.services.zevrant.oauth2.service.controller;
 
 import net.zevrant.services.zevrant.oauth2.service.rest.response.UsernameResponse;
 import net.zevrant.services.zevrant.oauth2.service.service.TokenService;

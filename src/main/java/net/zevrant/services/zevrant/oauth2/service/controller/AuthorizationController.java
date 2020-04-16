@@ -1,11 +1,11 @@
-package net.zevrant.services.zevrant.oauth2.service;
+package net.zevrant.services.zevrant.oauth2.service.controller;
 
 import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.LoginRequest;
-import net.zevrant.services.zevrant.oauth2.service.rest.response.AuthorizationResponse;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.TokenResponse;
 import net.zevrant.services.zevrant.oauth2.service.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -44,11 +44,9 @@ public class AuthorizationController {
     }
 
     @GetMapping
-    public AuthorizationResponse getAuthorization() {
+    public Authentication getAuthorization() {
         SecurityContext context = SecurityContextHolder.getContext();
-        AuthorizationResponse response =  new AuthorizationResponse();
-        response.setAuthorized(context.getAuthentication().isAuthenticated());
-        return response;
+        return context.getAuthentication();
     }
 
     @DeleteMapping
