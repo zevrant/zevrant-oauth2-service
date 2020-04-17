@@ -28,12 +28,13 @@ services:
       secret:
         ipv4_address: 173.16.238.12
     volumes:
-      - /storage/keys/db/oauth2:/storage/keys/db/oauth2
+      - /storage/keys/db/oauth2:/var/lib/postgresql
+      - /storage/keys/db/oauth2/conf:/etc/postgresql/conf.d
+      - /storage/keys/db/oauth2/backup:/var/lib/backup
     ports:
       - "5432:5432"
     image: webhippie/postgresql:latest
     environment:
-      PGDATA: /storage/keys/db/oauth2
       POSTGRES_DB: oauth2
       POSTGRES_USER: zevrant
       POSTGRESQL_ROOT_PASSWORD:
