@@ -33,7 +33,7 @@ stages:
 
 test:
   stage: test
-  script: bash gradlew sonar
+  script: bash gradlew build
 
 imageBuild:
   stage: imageBuild
