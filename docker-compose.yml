@@ -20,6 +20,8 @@ services:
       AWS_DEFAULT_REGION: 'us-east-1'
       AWS_DEFAULT_OUTPUT: json
   zevrant-oauth2-service-db:
+    networks:
+      - secret
     deploy:
       placement:
         constraints:
