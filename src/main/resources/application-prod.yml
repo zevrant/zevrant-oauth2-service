@@ -4,7 +4,7 @@ spring:
   profiles:
     active: local
   datasource:
-    url: 'jdbc:postgresql://zevrant-oauth2-service_zevrant-oauth2-service:5432/oauth2'
+    url: 'jdbc:postgresql://zevrant-oauth2-service_zevrant-oauth2-service-db:5432/oauth2'
     username: 'zevrant'
     password: ${rds.oauth.password}
   jpa:
