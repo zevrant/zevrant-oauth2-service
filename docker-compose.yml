@@ -25,12 +25,12 @@ services:
         constraints:
           - node.labels.usage == db
     volumes:
-      - /storage/db/oauth2:/storage/db/oauth2
+      - /storage/keys/db/oauth2:/storage/db/oauth2
     ports:
       - "5432:5432"
     image: postgres:latest
     environment:
-      PGDATA: /storage/db/oauth2
+      PGDATA: /storage/keys/db/oauth2
       POSTGRES_PASSWORD:
       POSTGRES_USER: zevrant
       POSTGRES_DB: oauth2
