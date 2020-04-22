@@ -166,3 +166,45 @@ databaseChangeLog:
             referencedTableName: USERS
             referencedTableSchemaName: public
             validate: true
+  - changeSet:
+      id: 8
+      author: zevrant
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            schemaName: public
+            tableName: roleAssociation
+        - createTable:
+            tableName: role_association
+            columns:
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+  - changeset:
+      id: 9
+      author: zevrant
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            schemaName: public
+            tableName: roles
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: role_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_desc
+                  type: varchar(512)
+                  constraints:
+                    nullable: false

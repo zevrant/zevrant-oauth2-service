@@ -1,9 +1,14 @@
 package net.zevrant.services.zevrant.oauth2.service.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.zevrant.services.security.common.secrets.management.rest.response.ZevrantAuthentication;
+import net.zevrant.services.zevrant.oauth2.service.entity.Role;
 import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.LoginRequest;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.TokenResponse;
 import net.zevrant.services.zevrant.oauth2.service.service.TokenService;
+import net.zevrant.services.zevrant.oauth2.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -12,15 +17,21 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/token")
 public class AuthorizationController {
 
     private TokenService tokenService;
+    private ObjectMapper objectMapper;
+    private UserService userService;
 
     @Autowired
-    public AuthorizationController(TokenService tokenService) {
+    public AuthorizationController(TokenService tokenService, UserService userService) {
+        this.userService = userService;
         this.tokenService = tokenService;
+        this.objectMapper = new ObjectMapper();
     }
 
     @PostMapping
@@ -44,9 +55,15 @@ public class AuthorizationController {
     }
 
     @GetMapping
-    public Authentication getAuthorization() {
+    public Authentication getAuthorization(@RequestHeader String authorization) throws JsonProcessingException {
         SecurityContext context = SecurityContextHolder.getContext();
-        return context.getAuthentication();
+
+        ZevrantAuthentication authentication =
+                objectMapper.readValue(objectMapper.writeValueAsString(context.getAuthentication()), ZevrantAuthentication.class);
+        String token = authorization.split(" ")[1];
+        List<Role> roles = userService.getRolesByUsername(tokenService.getUsername(token));
+        authentication.setRoles(userService.convertRoles(roles));
+        return authentication;
     }
 
     @DeleteMapping

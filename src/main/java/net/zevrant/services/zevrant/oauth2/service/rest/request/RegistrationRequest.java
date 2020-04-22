@@ -1,15 +1,18 @@
 package net.zevrant.services.zevrant.oauth2.service.rest.request;
 
+import java.util.List;
+
 public class RegistrationRequest {
 
     private String clientId;
     private String clientSecret;
     private String registrationCode;
+    private List<String> roles;
 
     public RegistrationRequest() {
     }
 
-    public RegistrationRequest(String clientId, String clientSecret) {
+    public RegistrationRequest(String clientId, String clientSecret, List<String> roles) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
     }
