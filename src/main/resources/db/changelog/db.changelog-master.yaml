@@ -208,3 +208,24 @@ databaseChangeLog:
                   type: varchar(512)
                   constraints:
                     nullable: false
+  - changeset:
+      id: 10
+      author: zevrant
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            schemaName: public
+            tableName: roles
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: role_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_desc
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
