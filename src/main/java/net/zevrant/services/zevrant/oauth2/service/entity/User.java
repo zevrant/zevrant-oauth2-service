@@ -20,6 +20,12 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email_address")
+    private String emailAddress;
+
+    @Column(name = "subscribed")
+    private boolean subscribed;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "roleAssociation",
             joinColumns = {
@@ -63,5 +69,21 @@ public class User implements Serializable {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public boolean isSubscribed() {
+        return subscribed;
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        this.subscribed = subscribed;
     }
 }

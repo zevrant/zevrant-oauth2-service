@@ -12,9 +12,11 @@ public class RegistrationRequest {
     public RegistrationRequest() {
     }
 
-    public RegistrationRequest(String clientId, String clientSecret, List<String> roles) {
+    public RegistrationRequest(String clientId, String clientSecret, String registrationCode, List<String> roles) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
+        this.registrationCode = registrationCode;
+        this.roles = roles;
     }
 
     public String getClientId() {
@@ -39,5 +41,13 @@ public class RegistrationRequest {
 
     public void setRegistrationCode(String registrationCode) {
         this.registrationCode = registrationCode;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }

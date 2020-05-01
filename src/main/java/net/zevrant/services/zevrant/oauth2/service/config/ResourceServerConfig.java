@@ -39,7 +39,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         if (activeProfiles.contains("prod")) {
             openPaths = new String[]{"/authorize", "/token", "/register", "/indoctrinate", "/email"};
         } else {
-            openPaths = new String[]{"/authorize", "/token", "/register", "/indoctrinate", "/email"};
+            openPaths = new String[]{"/authorize", "/token", "/register", "/indoctrinate", "/email", "/user"};
         }
     }
 
