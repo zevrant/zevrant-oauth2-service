@@ -228,28 +228,4 @@ databaseChangeLog:
                   name: role_desc
                   type: varchar(512)
                   constraints:
-                    nullable: false
-  - changeSet:
-      id: addColumn-example
-      author: liquibase-docs
-      changes:
-        - addColumn:
-            columns:
-              - column:
-                  name: email_address
-                  type: varchar(255)
-            schemaName: public
-            tableName: USERS
-        - addColumn:
-            columns:
-              - column:
-                  name: subscribed
-                  type: boolean
-            schemaName: public
-            tableName: USERS
-        - addDefaultValue:
-            columnDataType: boolean
-            columnName: subscribed
-            defaultValueBoolean: true
-            schemaName: public
-            tableName: USERS
+                    nullable: false                    
