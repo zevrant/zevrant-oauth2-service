@@ -228,4 +228,15 @@ databaseChangeLog:
                   name: role_desc
                   type: varchar(512)
                   constraints:
-                    nullable: false                    
+                    nullable: false
+  - changeset:
+      id: 11
+      author: zevrant
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: email_address
+                  type: varchar(255)
+            schemaName: public
+            tableName: users
