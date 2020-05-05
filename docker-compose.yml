@@ -30,7 +30,7 @@ services:
       - /storage/keys/db/oauth2/:/storage/keys/db/oauth2/
     ports:
       - "5432:5432"
-    image: zevrant/zevrant-postgres-service:latest
+    image: postgres:latest
     environment:
       PGDATA: /storage/keys/db/oauth2/
       POSTGRES_PASSWORD:
