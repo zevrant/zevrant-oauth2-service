@@ -240,3 +240,14 @@ databaseChangeLog:
                   type: varchar(255)
             schemaName: public
             tableName: users
+  - changeset:
+      id: 12
+      author: zevrant
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: subscribed
+                  type: boolean
+            schemaName: public
+            tableName: users
