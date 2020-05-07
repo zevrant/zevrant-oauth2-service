@@ -12,14 +12,16 @@ public class UserUpdate {
     private String passwordConfirmation;
     @NotNull
     private String emailAddress;
+    @NotNull
     private boolean subscribed;
     private List<String> roles;
+    private boolean enable2fa;
 
     public UserUpdate() {
     }
 
     public UserUpdate(String username, @NotNull String originalUsername, String password, String passwordConfirmation,
-                      @NotNull String emailAddress, boolean subscribed, List<String> roles) {
+                      @NotNull String emailAddress, boolean subscribed, List<String> roles, boolean enable2fa) {
         this.username = username;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
@@ -27,6 +29,7 @@ public class UserUpdate {
         this.subscribed = subscribed;
         this.roles = roles;
         this.originalUsername = originalUsername;
+        this.enable2fa = enable2fa;
     }
 
     public String getUsername() {
@@ -83,5 +86,13 @@ public class UserUpdate {
 
     public void setOriginalUsername(String originalUsername) {
         this.originalUsername = originalUsername;
+    }
+
+    public boolean isEnable2fa() {
+        return enable2fa;
+    }
+
+    public void setEnable2fa(boolean enable2fa) {
+        this.enable2fa = enable2fa;
     }
 }

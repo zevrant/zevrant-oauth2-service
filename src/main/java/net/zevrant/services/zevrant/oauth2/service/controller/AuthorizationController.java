@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/token")
@@ -35,9 +36,10 @@ public class AuthorizationController {
     }
 
     @PostMapping
-    public TokenResponse login(@RequestHeader String client_id, @RequestHeader String client_secret) {
+    public TokenResponse login(@RequestHeader String client_id, @RequestHeader String client_secret,
+                               @RequestHeader Optional<String> oneTimePad) {
         try {
-            OAuth2AccessToken oAuth2AccessToken = tokenService.GetAccessToken(client_id, client_secret);
+            OAuth2AccessToken oAuth2AccessToken = tokenService.getAccessToken(client_id, client_secret, oneTimePad);
             TokenResponse response = new TokenResponse();
             response.setAccessToken(oAuth2AccessToken.getValue());
             response.setExpiresIn(oAuth2AccessToken.getExpiresIn());
@@ -51,7 +53,7 @@ public class AuthorizationController {
 
     @PostMapping("/request_body")
     public TokenResponse login(@RequestBody LoginRequest loginRequest) {
-        return login(loginRequest.getClient_id(), loginRequest.getClientSecret());
+        return login(loginRequest.getClient_id(), loginRequest.getClientSecret(), Optional.of(loginRequest.getOneTimePad()));
     }
 
     @GetMapping

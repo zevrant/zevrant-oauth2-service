@@ -7,6 +7,7 @@ import net.zevrant.services.zevrant.oauth2.service.rest.response.UserResponse;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.UsernameResponse;
 import net.zevrant.services.zevrant.oauth2.service.service.TokenService;
 import net.zevrant.services.zevrant.oauth2.service.service.UserService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,16 +35,24 @@ public class UserController {
     @GetMapping("/{username}")
     public UserResponse getUser(@PathVariable String username) {
         User user = userService.getUser(username);
-        return new UserResponse(username, user.getEmailAddress(), userService.convertRoles(user.getRoles()));
+        return new UserResponse(username, user.getEmailAddress(), userService.convertRoles(user.getRoles()),
+                user.isSubscribed(), user.isTwoFactorEnabeld());
     }
 
     @PutMapping
     public UserResponse updateUser(@RequestBody @Valid UserUpdate userUpdate) {
-        if (!userUpdate.getPassword().equals(userUpdate.getPasswordConfirmation())) {
+        boolean twoFactorEnabled = userService.getUser(userUpdate.getOriginalUsername()).isTwoFactorEnabeld();
+        if (StringUtils.isNotBlank(userUpdate.getPassword())
+                && !userUpdate.getPassword().equals(userUpdate.getPasswordConfirmation())) {
             throw new PasswordMismatchException("Passwords do not match");
         }
         User user = userService.updateUser(userUpdate.getOriginalUsername(), userUpdate.getUsername(), userUpdate.getPassword(),
-                userUpdate.getEmailAddress(), userUpdate.getRoles(), userUpdate.isSubscribed());
-        return new UserResponse(user.getUsername(), user.getEmailAddress(), userService.convertRoles(user.getRoles()));
+                userUpdate.getEmailAddress(), userUpdate.getRoles(), userUpdate.isSubscribed(), userUpdate.isEnable2fa());
+        UserResponse response = new UserResponse(user.getUsername(), user.getEmailAddress(),
+                userService.convertRoles(user.getRoles()), user.isSubscribed(), user.isTwoFactorEnabeld());
+        if (!twoFactorEnabled && userUpdate.isEnable2fa()) {
+            response.setTwoFactorSecret(user.getSecret());
+        }
+        return response;
     }
 }

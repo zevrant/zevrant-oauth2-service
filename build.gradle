@@ -35,13 +35,16 @@ dependencies {
 	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.2.1.RELEASE'
 	implementation group: 'org.springframework', name: 'spring-aop', version: '5.2.5.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.liquibase:liquibase-core:3.8.4'
+	implementation 'org.liquibase:liquibase-core:3.8.9'
+	liquibaseRuntime 'org.liquibase:liquibase-core:3.8.9'
+	liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.jboss.aerogear:aerogear-otp-java:1.0.0'
 	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
-	implementation 'com.h2database:h2:1.4.200'
 	implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	runtimeOnly 'org.postgresql:postgresql'
+	liquibaseRuntime 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
@@ -59,6 +62,19 @@ jacocoTestReport {
 	reports {
 		xml.enabled true
 	}
+}
+
+liquibase {
+	activities {
+		main {
+			changeLogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
+			url 'jdbc:postgresql://localhost:5432/oauth2'
+			username 'sa'
+			password 'example'
+			classpath 'src/main/resources'
+		}
+	}
+	runList = 'main'
 }
 
 sonarqube {

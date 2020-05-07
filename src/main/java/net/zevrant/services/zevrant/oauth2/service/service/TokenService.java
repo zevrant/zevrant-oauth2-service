@@ -3,6 +3,7 @@ package net.zevrant.services.zevrant.oauth2.service.service;
 import com.amazonaws.util.Base64;
 import net.zevrant.services.zevrant.oauth2.service.config.AuthenticationManager;
 import net.zevrant.services.zevrant.oauth2.service.config.SecretResource;
+import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.InvalidOTPException;
 import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
 import net.zevrant.services.zevrant.oauth2.service.entity.Token;
@@ -11,6 +12,7 @@ import net.zevrant.services.zevrant.oauth2.service.exceptions.IncorrectPasswordE
 import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.repository.TokenRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
+import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,9 +57,9 @@ public class TokenService {
     }
 
     @Transactional
-    public OAuth2AccessToken GetAccessToken(String clientId,  String clientSecret) {
-        Optional<OAuth2Authentication> authenticationProxy = authenticate(clientId, clientSecret);
-        if(authenticationProxy.isEmpty()){
+    public OAuth2AccessToken getAccessToken(String clientId, String clientSecret, Optional<String> oneTimePad) {
+        Optional<OAuth2Authentication> authenticationProxy = authenticate(clientId, clientSecret, oneTimePad);
+        if (authenticationProxy.isEmpty()) {
             return null;
         }
         OAuth2Authentication authentication = authenticationProxy.get();
@@ -72,16 +74,26 @@ public class TokenService {
         return accessToken;
     }
 
-    private Optional<OAuth2Authentication> authenticate(String clientId, String clientSecret) {
+    private Optional<OAuth2Authentication> authenticate(String clientId, String clientSecret, Optional<String> oneTimePad) {
         OAuth2Request request = new OAuth2Request(clientId);
         Optional<User> detailsProxy = userRepository.findByUsername(clientId);
-        if(detailsProxy.isEmpty()) {
+        if (detailsProxy.isEmpty()) {
             throw new UserNotFoundException("User " + clientId + " not found");
         }
         User details = detailsProxy.get();
         OAuth2Authentication authentication = new OAuth2Authentication(request, new ClientDetails(details.getUsername(), details.getPassword()));
-        if(!passwordEncoder.matches(clientSecret, details.getPassword())){
+        if (!passwordEncoder.matches(clientSecret, details.getPassword())) {
             throw new IncorrectPasswordException("Password for " + clientId + " does not match");
+        }
+        if (oneTimePad.isEmpty() && details.isTwoFactorEnabeld()) {
+            throw new InvalidOTPException("The 2FA code provided is invalid");
+        }
+        if (oneTimePad.isPresent()) {
+            Totp totp = new Totp(details.getSecret());
+            if (!totp.verify(oneTimePad.get())) {
+                throw new InvalidOTPException("The 2FA code provided is invalid");
+            }
+            return Optional.of(authentication);
         }
         return Optional.of(authentication);
     }

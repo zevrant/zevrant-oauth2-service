@@ -6,6 +6,7 @@ public class LoginRequest {
     private String client_id;
     private String client_secret;
     private String scope;
+    private String oneTimePad;
 
     public LoginRequest() {
     }
@@ -40,5 +41,13 @@ public class LoginRequest {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public String getOneTimePad() {
+        return oneTimePad;
+    }
+
+    public void setOneTimePad(String oneTimePad) {
+        this.oneTimePad = oneTimePad;
     }
 }

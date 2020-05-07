@@ -26,6 +26,12 @@ public class User implements Serializable {
     @Column(name = "subscribed")
     private boolean subscribed;
 
+    @Column(name = "two_factor_enabled")
+    private boolean twoFactorEnabeld;
+
+    @Column(name = "two_factor_secret")
+    private String secret;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "roleAssociation",
             joinColumns = {
@@ -85,5 +91,21 @@ public class User implements Serializable {
 
     public void setSubscribed(boolean subscribed) {
         this.subscribed = subscribed;
+    }
+
+    public boolean isTwoFactorEnabeld() {
+        return twoFactorEnabeld;
+    }
+
+    public void setTwoFactorEnabeld(boolean twoFactorEnabeld) {
+        this.twoFactorEnabeld = twoFactorEnabeld;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 }

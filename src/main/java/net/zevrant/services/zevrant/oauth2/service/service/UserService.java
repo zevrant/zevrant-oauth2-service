@@ -6,6 +6,7 @@ import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.repository.RoleRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import org.apache.commons.lang.StringUtils;
+import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,8 +57,10 @@ public class UserService {
         return newRoles;
     }
 
-    public User updateUser(String originalUsername, String username, String password, String emailAddress, List<String> roles, boolean subscribed) {
+    public User updateUser(String originalUsername, String username, String password, String emailAddress, List<String> roles,
+                           boolean subscribed, boolean twoFactorEnabled) {
         User user = getUser(originalUsername);
+        manage2fa(user, twoFactorEnabled);
         user.setRoles(convertStrings(roles));
         if (StringUtils.isNotBlank(username)) {
             user.setUsername(username);
@@ -72,6 +75,21 @@ public class UserService {
         user.setSubscribed(subscribed);
         userRepository.save(user);
         return user;
+    }
+
+    private void manage2fa(User user, boolean twoFactorEnabled) {
+        if (user.isTwoFactorEnabeld() && twoFactorEnabled) {
+            return;
+        }
+        if (!user.isTwoFactorEnabeld() && twoFactorEnabled) {
+            user.setTwoFactorEnabeld(true);
+            user.setSecret(Base32.random());
+            return;
+        }
+        if (!twoFactorEnabled) {
+            user.setTwoFactorEnabeld(false);
+            user.setSecret(null);
+        }
     }
 
 }
