@@ -47,10 +47,10 @@ public class UserController {
             throw new PasswordMismatchException("Passwords do not match");
         }
         User user = userService.updateUser(userUpdate.getOriginalUsername(), userUpdate.getUsername(), userUpdate.getPassword(),
-                userUpdate.getEmailAddress(), userUpdate.getRoles(), userUpdate.isSubscribed(), userUpdate.isEnable2fa());
+                userUpdate.getEmailAddress(), userUpdate.getRoles(), userUpdate.isSubscribed(), userUpdate.isTwoFactorEnabled());
         UserResponse response = new UserResponse(user.getUsername(), user.getEmailAddress(),
                 userService.convertRoles(user.getRoles()), user.isSubscribed(), user.isTwoFactorEnabeld());
-        if (!twoFactorEnabled && userUpdate.isEnable2fa()) {
+        if (!twoFactorEnabled && userUpdate.isTwoFactorEnabled()) {
             response.setTwoFactorSecret(user.getSecret());
         }
         return response;
