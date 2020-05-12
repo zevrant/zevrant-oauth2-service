@@ -116,7 +116,9 @@ public class UserController {
         List<User> users = userRepository.findAll();
         users.forEach((user) -> {
             try {
-                user.setSecret(encryptionService.encryptData(user.getSecret()));
+                if (!user.getUsername().equals("zevrant")) {
+                    user.setSecret(encryptionService.encryptData(user.getSecret()));
+                }
             } catch (CertificateEncodingException e) {
                 e.printStackTrace();
             } catch (CMSException e) {
