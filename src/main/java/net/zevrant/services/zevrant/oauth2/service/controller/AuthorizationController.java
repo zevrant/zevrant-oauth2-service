@@ -9,6 +9,7 @@ import net.zevrant.services.zevrant.oauth2.service.rest.request.LoginRequest;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.TokenResponse;
 import net.zevrant.services.zevrant.oauth2.service.service.TokenService;
 import net.zevrant.services.zevrant.oauth2.service.service.UserService;
+import org.bouncycastle.cms.CMSException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -37,7 +38,7 @@ public class AuthorizationController {
 
     @PostMapping
     public TokenResponse login(@RequestHeader String client_id, @RequestHeader String client_secret,
-                               @RequestHeader Optional<String> oneTimePad) {
+                               @RequestHeader Optional<String> oneTimePad) throws CMSException {
         try {
             OAuth2AccessToken oAuth2AccessToken = tokenService.getAccessToken(client_id, client_secret, oneTimePad);
             TokenResponse response = new TokenResponse();
@@ -52,7 +53,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/request_body")
-    public TokenResponse login(@RequestBody LoginRequest loginRequest) {
+    public TokenResponse login(@RequestBody LoginRequest loginRequest) throws CMSException {
         return login(loginRequest.getClient_id(), loginRequest.getClientSecret(), Optional.of(loginRequest.getOneTimePad()));
     }
 

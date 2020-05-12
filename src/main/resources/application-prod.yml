@@ -19,9 +19,9 @@ oauth2:
 
 zevrant:
   bucketName: 'zevrant-resources'
-  keystore: 'prod/ssl/keystore.p12'
+  keystore: 'prod/ssl/oauth/zevrant-services.p12'
   ssl:
-    key-store: /storage/keys/zevrant-services.p12
+    key-store: /storage/keys/zevrant-services.back.p12
     key-store-password: ${ssl.keystore.password}
 
 logging:

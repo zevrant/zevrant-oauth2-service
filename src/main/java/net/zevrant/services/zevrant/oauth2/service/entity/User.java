@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @SequenceGenerator(name = "users", initialValue = 1, allocationSize = 1000)
-public class User implements Serializable {
+public class User implements Serializable, Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersIdSeq")
@@ -30,7 +30,10 @@ public class User implements Serializable {
     private boolean twoFactorEnabeld;
 
     @Column(name = "two_factor_secret")
-    private String secret;
+    private byte[] secret;
+
+    @Column
+    private Boolean disabled;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "roleAssociation",
@@ -101,11 +104,19 @@ public class User implements Serializable {
         this.twoFactorEnabeld = twoFactorEnabeld;
     }
 
-    public String getSecret() {
+    public byte[] getSecret() {
         return secret;
     }
 
-    public void setSecret(String secret) {
+    public void setSecret(byte[] secret) {
         this.secret = secret;
+    }
+
+    public Boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 }

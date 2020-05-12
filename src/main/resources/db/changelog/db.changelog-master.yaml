@@ -178,7 +178,35 @@ databaseChangeLog:
             referencedTableName: USERS
             referencedTableSchemaName: public
             validate: true
-
+  - changeSet:
+      id: 8
+      author: zevrant
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: disabled
+                  type: boolean
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: modifyDataType-example
+      author: liquibase-docs
+      changes:
+        - modifyDataType:
+            columnName: two_factor_secret
+            newDataType: varchar(2000)
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: 9
+      author: zevrant
+      changes:
+        - modifyDataType:
+            columnName: two_factor_secret
+            newDataType: bytea
+            schemaName: public
+            tableName: users
 
 
 

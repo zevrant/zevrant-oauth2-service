@@ -6,12 +6,15 @@ import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.repository.RoleRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import org.apache.commons.lang.StringUtils;
+import org.bouncycastle.cms.CMSException;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.cert.CertificateEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,12 +25,15 @@ public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private EncryptionService encryptionService;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
+                       EncryptionService encryptionService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.encryptionService = encryptionService;
     }
 
     public List<Role> getRolesByUsername(String username) {
@@ -58,7 +64,7 @@ public class UserService {
     }
 
     public User updateUser(String originalUsername, String username, String password, String emailAddress, List<String> roles,
-                           boolean subscribed, boolean twoFactorEnabled) {
+                           boolean subscribed, boolean twoFactorEnabled) throws CertificateEncodingException, IOException, CMSException {
         User user = getUser(originalUsername);
         manage2fa(user, twoFactorEnabled);
         user.setRoles(convertStrings(roles));
@@ -73,17 +79,18 @@ public class UserService {
         }
         user.setEmailAddress(emailAddress);
         user.setSubscribed(subscribed);
+        user.setDisabled(false);
         userRepository.save(user);
         return user;
     }
 
-    private void manage2fa(User user, boolean twoFactorEnabled) {
+    private void manage2fa(User user, boolean twoFactorEnabled) throws CertificateEncodingException, IOException, CMSException {
         if (user.isTwoFactorEnabeld() && twoFactorEnabled) {
             return;
         }
         if (!user.isTwoFactorEnabeld() && twoFactorEnabled) {
             user.setTwoFactorEnabeld(true);
-            user.setSecret(Base32.random());
+            user.setSecret(encryptionService.encryptData(Base32.random().getBytes()));
             return;
         }
         if (!twoFactorEnabled) {
@@ -92,4 +99,9 @@ public class UserService {
         }
     }
 
+    public User getUserByEmail(String emailAddress) {
+        return userRepository.findByEmailAddress(emailAddress).orElseThrow(() -> {
+            throw new UsernameNotFoundException("User " + emailAddress + " not found");
+        });
+    }
 }
