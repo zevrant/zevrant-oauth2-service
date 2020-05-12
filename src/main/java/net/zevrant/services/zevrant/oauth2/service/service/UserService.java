@@ -55,11 +55,13 @@ public class UserService {
 
     public List<Role> convertStrings(List<String> roles) {
         List<Role> newRoles = new ArrayList<>();
-        roles.forEach((role) -> {
-            Optional<Role> roleProxy = roleRepository.findById(role);
-            roleProxy.ifPresent(newRoles::add);
+        if (roles != null && !roles.isEmpty()) {
+            roles.forEach((role) -> {
+                Optional<Role> roleProxy = roleRepository.findById(role);
+                roleProxy.ifPresent(newRoles::add);
+            });
+        }
 
-        });
         return newRoles;
     }
 
@@ -67,7 +69,9 @@ public class UserService {
                            boolean subscribed, boolean twoFactorEnabled) throws CertificateEncodingException, IOException, CMSException {
         User user = getUser(originalUsername);
         manage2fa(user, twoFactorEnabled);
-        user.setRoles(convertStrings(roles));
+        if (roles != null && !roles.isEmpty()) {
+            user.setRoles(convertStrings(roles));
+        }
         if (StringUtils.isNotBlank(username)) {
             user.setUsername(username);
         }

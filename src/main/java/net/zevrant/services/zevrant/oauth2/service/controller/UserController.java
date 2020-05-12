@@ -22,7 +22,6 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
-import java.util.List;
 import java.util.Properties;
 
 @RestController
@@ -109,25 +108,6 @@ public class UserController {
         userService.updateUser(request.getOriginalUsername(), request.getUsername(),
                 request.getPassword(), request.getPasswordConfirmation(), request.getRoles(),
                 request.isSubscribed(), request.isTwoFactorEnabled());
-    }
-
-    @GetMapping("/encrypt-otp")
-    public void encrypt() {
-        List<User> users = userRepository.findAll();
-        users.forEach((user) -> {
-            try {
-                if (!user.getUsername().equals("zevrant")) {
-                    user.setSecret(encryptionService.encryptData(user.getSecret()));
-                }
-            } catch (CertificateEncodingException e) {
-                e.printStackTrace();
-            } catch (CMSException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        userRepository.saveAll(users);
     }
 
 }
