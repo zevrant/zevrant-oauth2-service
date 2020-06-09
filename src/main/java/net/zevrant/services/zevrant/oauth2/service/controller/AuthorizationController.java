@@ -3,6 +3,7 @@ package net.zevrant.services.zevrant.oauth2.service.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zevrant.services.security.common.secrets.management.rest.response.ZevrantAuthentication;
+import net.zevrant.services.security.common.secrets.management.rest.response.ZevrantPrincipal;
 import net.zevrant.services.zevrant.oauth2.service.entity.Role;
 import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.LoginRequest;
@@ -11,6 +12,7 @@ import net.zevrant.services.zevrant.oauth2.service.service.TokenService;
 import net.zevrant.services.zevrant.oauth2.service.service.UserService;
 import org.bouncycastle.cms.CMSException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,6 +39,7 @@ public class AuthorizationController {
     }
 
     @PostMapping
+    @PreAuthorize("permitAll()")
     public TokenResponse login(@RequestHeader String client_id, @RequestHeader String client_secret,
                                @RequestHeader Optional<String> oneTimePad) throws CMSException {
         try {
@@ -64,8 +67,12 @@ public class AuthorizationController {
         ZevrantAuthentication authentication =
                 objectMapper.readValue(objectMapper.writeValueAsString(context.getAuthentication()), ZevrantAuthentication.class);
         String token = authorization.split(" ")[1];
-        List<Role> roles = userService.getRolesByUsername(tokenService.getUsername(token));
-        authentication.setRoles(userService.convertRoles(roles));
+        String username = tokenService.getUsername(token);
+        List<Role> roles = userService.getRolesByUsername(username);
+        authentication.setAuthorities(userService.convertRoles(roles));
+        authentication.setCredentials(authorization.split(" ")[1]);
+        authentication.setPrincipal(new ZevrantPrincipal(username));
+
         return authentication;
     }
 

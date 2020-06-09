@@ -1,5 +1,6 @@
 package net.zevrant.services.zevrant.oauth2.service.service;
 
+import net.zevrant.services.security.common.secrets.management.rest.response.ZevrantGrantedAuthority;
 import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.InvalidPasswordException;
 import net.zevrant.services.zevrant.oauth2.service.entity.Role;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
@@ -47,9 +48,9 @@ public class UserService {
         });
     }
 
-    public List<String> convertRoles(List<Role> roles) {
-        List<String> newRoles = new ArrayList<>();
-        roles.forEach((role) -> newRoles.add(role.getRoleName()));
+    public List<ZevrantGrantedAuthority> convertRoles(List<Role> roles) {
+        List<ZevrantGrantedAuthority> newRoles = new ArrayList<>();
+        roles.forEach((role) -> newRoles.add(new ZevrantGrantedAuthority(role.getRoleName())));
         return newRoles;
     }
 
