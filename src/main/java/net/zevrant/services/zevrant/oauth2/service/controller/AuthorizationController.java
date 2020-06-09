@@ -12,7 +12,6 @@ import net.zevrant.services.zevrant.oauth2.service.service.TokenService;
 import net.zevrant.services.zevrant.oauth2.service.service.UserService;
 import org.bouncycastle.cms.CMSException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,7 +38,6 @@ public class AuthorizationController {
     }
 
     @PostMapping
-    @PreAuthorize("permitAll()")
     public TokenResponse login(@RequestHeader String client_id, @RequestHeader String client_secret,
                                @RequestHeader Optional<String> oneTimePad) throws CMSException {
         try {

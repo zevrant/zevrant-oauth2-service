@@ -3,6 +3,7 @@ package net.zevrant.services.zevrant.oauth2.service.controller;
 import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.PasswordMismatchException;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
+import net.zevrant.services.zevrant.oauth2.service.rest.request.AddRole;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.ForgotPasswordRequest;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.UserUpdate;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.UserResponse;
@@ -22,6 +23,7 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
+import java.util.List;
 import java.util.Properties;
 
 @RestController
@@ -51,7 +53,7 @@ public class UserController {
     @GetMapping("/{username}")
     public UserResponse getUser(@PathVariable String username) {
         User user = userService.getUser(username);
-        return new UserResponse(username, user.getEmailAddress(), userService.convertRoles(user.getRoles()),
+        return new UserResponse(username, user.getEmailAddress(), userService.convertRoleStrings(user.getRoles()),
                 user.isSubscribed(), user.isTwoFactorEnabeld());
     }
 
@@ -65,7 +67,7 @@ public class UserController {
         User user = userService.updateUser(userUpdate.getOriginalUsername(), userUpdate.getUsername(), userUpdate.getPassword(),
                 userUpdate.getEmailAddress(), userUpdate.getRoles(), userUpdate.isSubscribed(), userUpdate.isTwoFactorEnabled());
         UserResponse response = new UserResponse(user.getUsername(), user.getEmailAddress(),
-                userService.convertRoles(user.getRoles()), user.isSubscribed(), user.isTwoFactorEnabeld());
+                userService.convertRoleStrings(user.getRoles()), user.isSubscribed(), user.isTwoFactorEnabeld());
         if (!twoFactorEnabled && userUpdate.isTwoFactorEnabled()) {
             response.setTwoFactorSecret(new String(encryptionService.decryptData(user.getSecret())));
         }
@@ -108,6 +110,30 @@ public class UserController {
         userService.updateUser(request.getOriginalUsername(), request.getUsername(),
                 request.getPassword(), request.getPasswordConfirmation(), request.getRoles(),
                 request.isSubscribed(), request.isTwoFactorEnabled());
+    }
+
+    @GetMapping
+    public List<UserResponse> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/roles")
+    public List<String> getAllRoles() {
+        return userService.getAllRoles();
+    }
+
+    @PutMapping("/bulk")
+    public boolean updatesUsers(@RequestBody List<UserResponse> users) throws IOException, CMSException, CertificateEncodingException {
+        for (UserResponse user : users) {
+            userService.updateUser(user.getUsername(), user.getUsername(), null, user.getEmailAddress(), user.getRoles(), user.isSubscribed(), user.isTwoFactorEnabled());
+        }
+        return true;
+    }
+
+    @PostMapping("/add/role")
+    public boolean addRole(@RequestBody AddRole role) {
+        userService.addRole(role);
+        return true;
     }
 
 }

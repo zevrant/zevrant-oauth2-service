@@ -6,6 +6,8 @@ import net.zevrant.services.zevrant.oauth2.service.entity.Role;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.repository.RoleRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
+import net.zevrant.services.zevrant.oauth2.service.rest.request.AddRole;
+import net.zevrant.services.zevrant.oauth2.service.rest.response.UserResponse;
 import org.apache.commons.lang.StringUtils;
 import org.bouncycastle.cms.CMSException;
 import org.jboss.aerogear.security.otp.api.Base32;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +73,7 @@ public class UserService {
                            boolean subscribed, boolean twoFactorEnabled) throws CertificateEncodingException, IOException, CMSException {
         User user = getUser(originalUsername);
         manage2fa(user, twoFactorEnabled);
-        if (roles != null && !roles.isEmpty()) {
+        if (roles != null) {
             user.setRoles(convertStrings(roles));
         }
         if (StringUtils.isNotBlank(username)) {
@@ -108,5 +111,44 @@ public class UserService {
         return userRepository.findByEmailAddress(emailAddress).orElseThrow(() -> {
             throw new UsernameNotFoundException("User " + emailAddress + " not found");
         });
+    }
+
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return convertUsers(users);
+    }
+
+    private List<UserResponse> convertUsers(Collection<User> users) {
+        List<UserResponse> userResponses = new ArrayList<>();
+        users.forEach((user) -> {
+            UserResponse userResponse = new UserResponse();
+            userResponse.setEmailAddress(user.getEmailAddress());
+            userResponse.setRoles(convertRoleStrings(user.getRoles()));
+            userResponse.setSubscribed(user.isSubscribed());
+            userResponse.setUsername(user.getUsername());
+            userResponses.add(userResponse);
+        });
+        return userResponses;
+    }
+
+    public List<String> getAllRoles() {
+        List<String> roles = new ArrayList<>();
+        roleRepository.findAll().forEach((role -> roles.add(role.getRoleName())));
+        return roles;
+    }
+
+    public List<String> convertRoleStrings(List<Role> roles) {
+        List<String> roleStrings = new ArrayList<>();
+        roles.forEach((role) -> {
+            roleStrings.add(role.getRoleName());
+        });
+        return roleStrings;
+    }
+
+    public void addRole(AddRole role) {
+        Role newRole = new Role();
+        newRole.setRoleName(role.getRoleName());
+        newRole.setRoleDescription(role.getRoleDesc());
+        roleRepository.save(newRole);
     }
 }
