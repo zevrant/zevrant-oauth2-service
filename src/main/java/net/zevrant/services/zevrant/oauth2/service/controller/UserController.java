@@ -1,6 +1,7 @@
 package net.zevrant.services.zevrant.oauth2.service.controller;
 
 import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.PasswordMismatchException;
+import net.zevrant.services.zevrant.oauth2.service.entity.Role;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.AddRole;
@@ -14,6 +15,7 @@ import net.zevrant.services.zevrant.oauth2.service.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.bouncycastle.cms.CMSException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -113,16 +116,19 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('admin')")
     public List<UserResponse> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/roles")
+    @GetMapping("/all-roles")
+    @PreAuthorize("hasAuthority('admin')")
     public List<String> getAllRoles() {
         return userService.getAllRoles();
     }
 
     @PutMapping("/bulk")
+    @PreAuthorize("hasAuthority('admin')")
     public boolean updatesUsers(@RequestBody List<UserResponse> users) throws IOException, CMSException, CertificateEncodingException {
         for (UserResponse user : users) {
             userService.updateUser(user.getUsername(), user.getUsername(), null, user.getEmailAddress(), user.getRoles(), user.isSubscribed(), user.isTwoFactorEnabled());
@@ -131,9 +137,22 @@ public class UserController {
     }
 
     @PostMapping("/add/role")
+    @PreAuthorize("hasAuthority('admin')")
     public boolean addRole(@RequestBody AddRole role) {
         userService.addRole(role);
         return true;
     }
+
+    @GetMapping("/roles/{username}")
+    @PreAuthorize("hasAuthority('admin')")
+    public List<String> getUserRoles(@PathVariable("username") String username) {
+        List<Role> roles = userService.getUserRoles(username);
+        List<String> roleStrings = new ArrayList<>();
+        for (Role role : roles) {
+            roleStrings.add(role.getRoleName());
+        }
+        return roleStrings;
+    }
+
 
 }

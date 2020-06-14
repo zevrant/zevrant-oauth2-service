@@ -151,4 +151,9 @@ public class UserService {
         newRole.setRoleDescription(role.getRoleDesc());
         roleRepository.save(newRole);
     }
+
+    public List<Role> getUserRoles(String username) {
+        User user = getUser(username);
+        return user.getRoles();
+    }
 }
