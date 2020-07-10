@@ -29,11 +29,3 @@ logging:
     root: ERROR
     net.zevrant.services.zevrant.oauth2.service: ERROR
 
-eureka:
-  instance:
-    prefer-ip-address: true
-    hostname: ${IP_ADDRESS}
-    ip-address: ${IP_ADDRESS}
-  client:
-    serviceUrl:
-      defaultZone:  http://172.16.238.10:8999/eureka/
