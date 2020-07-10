@@ -24,3 +24,6 @@ CMD mkdir -p ~/.aws; echo "[default]" > ~/.aws/credentials\
  && password=`date +%s | sha256sum | base64 | head -c 32`\
  && openssl pkcs12 -export -inkey ~/private.pem -in ~/public.crt -passout "pass:$password" -out /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-services.p12\
  && java -jar -Dspring.profiles.active=prod -Dpassword=$password /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
+
+
+
