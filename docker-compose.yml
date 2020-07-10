@@ -5,7 +5,7 @@ services:
       - microservices
       - secret
     ports:
-      - "9001:9001"
+      - "443:9001"
     depends_on:
       - zevrant-oauth2-service-db
     image: zevrant/zevrant-oauth2-service:${VERSION}

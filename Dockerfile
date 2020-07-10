@@ -20,8 +20,7 @@ RUN mkdir ~/.aws; echo "[default]" > ~/.aws/config; echo "region = us-east-1" >>
 CMD mkdir -p ~/.aws; echo "[default]" > ~/.aws/credentials\
  && echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials\
  && echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials\
- && IFS=' '\
- && IP=$(ifconfig eth1 | grep "inet ")\
- && export IP_ADDRESS=$(echo $IP | cut -d' ' -f2)\
- && echo $IP_ADDRESS \
- && java -jar -Dspring.profiles.active=prod -Deureka.instance.hostname=$IP_ADDRESS /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
+ && openssl req -newkey rsa:4096 -nodes -keyout ~/private.pem -x509 -days 365 -out ~/public.crt -subj "/C=US/ST=New York/L=Brooklyn/O=Example Brooklyn Company/CN=examplebrooklyn.com"\
+ && password=`date +%s | sha256sum | base64 | head -c 32`\
+ && openssl pkcs12 -export -inkey ~/private.pem -in ~/public.crt -passout "pass:$password" -out /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-services.p12\
+ && java -jar -Dspring.profiles.active=prod -Dpassword=$password /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar

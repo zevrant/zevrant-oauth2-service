@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zevrant-oauth2-service-deployment
+  labels:
+    app: zevrant-oauth2-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: zevrant-oauth2-service
+  template:
+    metadata:
+      labels:
+        app: zevrant-oauth2-service
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: zevrant-oauth2-service
+          image: zevrant/zevrant-oauth2-service:$VERSION
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-access-key
+                  key: aws-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret-key
+                  key: aws-secret-key
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /zevrant-oauth2-service/actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /zevrant-oauth2-service/actuator/health
+              port: 8080
+            initialDelaySeconds: 10
