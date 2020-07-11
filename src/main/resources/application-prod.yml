@@ -1,10 +1,8 @@
 spring:
   main:
     allow-bean-definition-overriding: true
-  profiles:
-    active: local
   datasource:
-    url: 'jdbc:postgresql://zevrant-oauth2-service_zevrant-oauth2-service-db:5432/oauth2'
+    url: 'jdbc:postgresql://zevrant-oauth2-service-db:5432/oauth2'
     username: 'zevrant'
     password: ${rds.oauth.password}
   jpa:
@@ -19,7 +17,7 @@ oauth2:
 
 zevrant:
   bucketName: 'zevrant-resources'
-  keystore: 'prod/ssl/oauth/zevrant-services.p12'
+  keystore: ''
   ssl:
     key-store: ./zevrant-services.p12
     key-store-password: ${password}
