@@ -37,7 +37,7 @@ spec:
       nodeSelector:
         architecture: arm
       containers:
-        - name: zevrant-oauth2-service
+        - name: zevrant-oauth2-service-db
           image: postgres:latest
           volumeMounts:
             - name: database
