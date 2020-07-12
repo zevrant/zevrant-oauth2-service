@@ -4,12 +4,14 @@ spring:
   datasource:
     url: 'jdbc:postgresql://${ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_HOST}:${ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_PORT}/oauth2'
     username: 'zevrant'
-    password: ${rds.oauth.password}
+    password: ${rds.oauth2.password}
   jpa:
     show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: false
 
 zevrant:
   bucketName:

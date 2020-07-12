@@ -30,7 +30,7 @@ zevrant:
   bucketName: 'zevrant-resources'
   keystore: 'dev/ssl/keystore.p12'
   encrypted:
-    properties: ssl/keystore/password,rds/oauth/password
+    properties: ssl/keystore/password,rds/oauth2/password
 
 context:
   initializer:
