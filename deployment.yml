@@ -30,6 +30,8 @@ spec:
                 secretKeyRef:
                   name: aws-secret-key
                   key: aws-secret-key
+            - name: ENVIRONMENT
+              value: $ENVIRONMENT
           ports:
             - containerPort: 8080
           readinessProbe:
