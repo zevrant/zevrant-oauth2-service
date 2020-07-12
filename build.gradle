@@ -56,7 +56,6 @@ liquibase {
 	def liquibasePassword = System.getenv("POSTGRES_PASSWORD")
 	activities {
 		main {
-			changeLogFile changeLog
 			url "jdbc:psq;://$liquibaseUrl:$liquibasePort/oauth2"
 			username 'zevrant'
 			password liquibasePassword
