@@ -2,7 +2,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: 'jdbc:postgresql://10.97.75.171:5432/oauth2'
+    url: 'jdbc:postgresql://${ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_HOST}:${ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_PORT}/oauth2'
     username: 'zevrant'
     password: ${rds.oauth.password}
   jpa:

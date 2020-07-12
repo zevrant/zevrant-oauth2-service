@@ -49,7 +49,7 @@ spec:
                   name: oauth-db-password
                   key: password
             - name: PGDATA
-              value: /storage/keys/db/oauth2/
+              value: /storage/keys/db/$ENVIRONMENT/oauth2/
             - name: POSTGRES_USER
               value: zevrant
             - name: POSTGRES_DB
