@@ -66,14 +66,12 @@ jacocoTestReport {
 }
 
 liquibase {
-
 	activities {
 		main {
-
 			changeLogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
-			url "jdbc:postgresql://${System.getenv("ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_HOST")}:${System.getenv("ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_PORT")}/oauth2"
-			username 'zevrant'
-			password System.getenv("POSTGRES_PASSWORD")
+			url 'jdbc:postgresql://localhost:5432/oauth2'
+			username 'sa'
+			password 'example'
 			classpath 'src/main/resources'
 		}
 	}
