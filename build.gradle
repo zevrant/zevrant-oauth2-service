@@ -49,20 +49,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-
-liquibase {
-	def liquibaseUrl = System.getenv("ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_HOST")
-	def liquibasePort = System.getenv("ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_PORT")
-	def liquibasePassword = System.getenv("POSTGRES_PASSWORD")
-	activities {
-		main {
-			url "jdbc:psq;://$liquibaseUrl:$liquibasePort/oauth2"
-			username 'zevrant'
-			password liquibasePassword
-		}
-	}
-}
-
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
@@ -80,12 +66,14 @@ jacocoTestReport {
 }
 
 liquibase {
+
 	activities {
 		main {
+
 			changeLogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
-			url 'jdbc:postgresql://localhost:5432/oauth2'
-			username 'sa'
-			password 'example'
+			url "jdbc:postgresql://${System.getenv("ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_HOST")}:${System.getenv("ZEVRANT_OAUTH2_SERVICE_DB_SERVICE_PORT")}/oauth2"
+			username 'zevrant'
+			password System.getenv("POSTGRES_PASSWORD")
 			classpath 'src/main/resources'
 		}
 	}
