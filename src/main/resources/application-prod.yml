@@ -11,10 +11,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-oauth2:
-  keystore:
-    alias: 1
-
 zevrant:
   bucketName: 'zevrant-resources'
   keystore: ''

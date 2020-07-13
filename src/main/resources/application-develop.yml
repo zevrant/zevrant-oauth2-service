@@ -13,10 +13,6 @@ spring:
   liquibase:
     enabled: false
 
-oauth2:
-  keystore:
-    alias: 1
-
 zevrant:
   bucketName:
   keystore:

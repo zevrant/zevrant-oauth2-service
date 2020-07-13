@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/oauth2?createDatabaseIfNotExist=true
     username: sa
-    password: ${rds.oauth.password}
+    password: example
   jpa:
     show-sql: true
     properties:
@@ -21,14 +21,14 @@ server:
 
 oauth2:
   keystore:
-    alias: serverkey
+    alias: 1
 
 zevrant:
   ssl:
     key-store: /storage/keys/zevrant-services.p12
     key-store-password: ${ssl.keystore.password}
-  bucketName: 'zevrant-resources'
-  keystore: 'dev/ssl/keystore.p12'
+  bucketName:
+  keystore:
   encrypted:
     properties: ssl/keystore/password,rds/oauth2/password
 
