@@ -12,7 +12,7 @@ import net.zevrant.services.zevrant.oauth2.service.rest.response.UsernameRespons
 import net.zevrant.services.zevrant.oauth2.service.service.EncryptionService;
 import net.zevrant.services.zevrant.oauth2.service.service.TokenService;
 import net.zevrant.services.zevrant.oauth2.service.service.UserService;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.cms.CMSException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,9 +34,9 @@ import java.util.Properties;
 public class UserController {
 
     private final UserRepository userRepository;
-    private TokenService tokenService;
-    private UserService userService;
-    private EncryptionService encryptionService;
+    private final TokenService tokenService;
+    private final UserService userService;
+    private final EncryptionService encryptionService;
 
     @Autowired
     public UserController(TokenService tokenService, UserService userService, UserRepository userRepository,
