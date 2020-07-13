@@ -33,16 +33,16 @@ spec:
             - name: ENVIRONMENT
               value: $ENVIRONMENT
           ports:
-            - containerPort: 8080
+            - containerPort: 9001
           readinessProbe:
             httpGet:
               scheme: HTTPS
               path: /zevrant-oauth2-service/actuator/health
-              port: 8080
+              port: 9001
             initialDelaySeconds: 10
           livenessProbe:
             httpGet:
               scheme: HTTPS
               path: /zevrant-oauth2-service/actuator/health
-              port: 8080
+              port: 9001
             initialDelaySeconds: 10
