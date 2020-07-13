@@ -37,7 +37,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         this.authenticationManager = authenticationManager;
         this.clientDetailsService = clientDetailsService;
         List<String> activeProfiles = Arrays.asList(context.getEnvironment().getActiveProfiles());
-        if (activeProfiles.contains("prod") || activeProfiles.contains("develop")) {
+        if (activeProfiles.contains("prod")) {
             openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/email", "/actuator/health"};
         } else {
             openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/register", "/indoctrinate", "/email", "/user", "/actuator/health"};
