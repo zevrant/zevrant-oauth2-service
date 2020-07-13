@@ -19,7 +19,7 @@ zevrant:
   bucketName: 'zevrant-resources'
   keystore: ''
   ssl:
-    key-store: ./zevrant-services.p12
+    key-store: /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-services.p12
     key-store-password: ${password}
 
 logging:

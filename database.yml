@@ -54,6 +54,5 @@ spec:
               value: zevrant
             - name: POSTGRES_DB
               value: oauth2
-
           ports:
             - containerPort: 5432
