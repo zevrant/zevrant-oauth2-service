@@ -20,13 +20,14 @@ import java.util.List;
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    private UserProvider userProvider;
-    private ConfigurableApplicationContext context;
-    private ZevrantOauthResponseClient responseClient;
-    private PasswordEncoder passwordEncoder;
-    private AuthenticationManager authenticationManager;
-    private String[] openPaths;
-    private ClientDetailsService clientDetailsService;
+    private final UserProvider userProvider;
+    private final ConfigurableApplicationContext context;
+    private final ZevrantOauthResponseClient responseClient;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final String[] openPaths;
+    private final ClientDetailsService clientDetailsService;
+
     public ResourceServerConfig(UserProvider userProvider, ConfigurableApplicationContext context, ZevrantOauthResponseClient responseClient,
                                 PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, ClientDetailsService clientDetailsService) {
         this.userProvider = userProvider;
@@ -36,10 +37,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         this.authenticationManager = authenticationManager;
         this.clientDetailsService = clientDetailsService;
         List<String> activeProfiles = Arrays.asList(context.getEnvironment().getActiveProfiles());
-        if (activeProfiles.contains("prod")) {
-            openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/email"};
+        if (activeProfiles.contains("prod") || activeProfiles.contains("develop")) {
+            openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/email", "/actuator/health"};
         } else {
-            openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/register", "/indoctrinate", "/email", "/user"};
+            openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/register", "/indoctrinate", "/email", "/user", "/actuator/health"};
         }
     }
 
