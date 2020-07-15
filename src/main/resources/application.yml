@@ -18,7 +18,10 @@ server:
   port: 9001
   servlet:
     context-path: /${spring.application.name}
-
+  ssl:
+    key-store: /storage/keys/zevrant-services.p12
+    key-store-type: PKCS12
+    key-store-password: ${ssl.keystore.password}
 oauth2:
   keystore:
     alias: 1
