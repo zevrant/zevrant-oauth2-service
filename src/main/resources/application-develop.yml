@@ -16,8 +16,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  liquibase:
-    enabled: false
 
 zevrant:
   bucketName:
