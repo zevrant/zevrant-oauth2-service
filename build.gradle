@@ -65,19 +65,6 @@ jacocoTestReport {
 	}
 }
 
-liquibase {
-	activities {
-		main {
-			changeLogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
-			url 'jdbc:postgresql://localhost:5432/oauth2'
-			username 'sa'
-			password 'example'
-			classpath 'src/main/resources'
-		}
-	}
-	runList = 'main'
-}
-
 sonarqube {
 	properties {
 		property 'sonar.projectName', 'zevrant-oauth2-service'
