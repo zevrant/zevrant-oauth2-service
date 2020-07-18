@@ -15,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.web.bind.annotation.*;
@@ -62,15 +60,12 @@ public class AuthorizationController {
 
     @GetMapping
     public Authentication getAuthorization(@RequestHeader String authorization) throws JsonProcessingException {
-        SecurityContext context = SecurityContextHolder.getContext();
-
-        ZevrantAuthentication authentication =
-                objectMapper.readValue(objectMapper.writeValueAsString(context.getAuthentication()), ZevrantAuthentication.class);
         String token = authorization.split(" ")[1];
         String username = tokenService.getUsername(token);
         logger.debug("USERNAME: {}", username);
         List<Role> roles = userService.getRolesByUsername(username);
         logger.debug("Found roles: {}", roles);
+        ZevrantAuthentication authentication = userService.getAuthentication(username);
         authentication.setAuthorities(userService.convertRoles(roles));
         authentication.setCredentials(authorization.split(" ")[1]);
         authentication.setPrincipal(new ZevrantPrincipal(username));

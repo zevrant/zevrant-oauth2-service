@@ -1,5 +1,8 @@
 package net.zevrant.services.zevrant.oauth2.service.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.zevrant.services.security.common.secrets.management.rest.response.ZevrantAuthentication;
 import net.zevrant.services.security.common.secrets.management.rest.response.ZevrantGrantedAuthority;
 import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.InvalidPasswordException;
 import net.zevrant.services.zevrant.oauth2.service.entity.Role;
@@ -12,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.cms.CMSException;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +34,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final EncryptionService encryptionService;
-
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
                        EncryptionService encryptionService) {
@@ -155,5 +159,25 @@ public class UserService {
     public List<Role> getUserRoles(String username) {
         User user = getUser(username);
         return user.getRoles();
+    }
+
+    public ZevrantAuthentication getAuthentication(String username) {
+        User user = getUser(username);
+        try {
+            return objectMapper.readValue(user.getCurrentAuthentication(), ZevrantAuthentication.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Unable to deserialize authentication");
+        }
+    }
+
+    public void saveAuthentication(String username, Authentication authentication) {
+        User user = getUser(username);
+        try {
+            user.setCurrentAuthentication(objectMapper.writeValueAsString(authentication));
+            userRepository.save(user);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Unable to serialize Authentication");
+        }
+
     }
 }
