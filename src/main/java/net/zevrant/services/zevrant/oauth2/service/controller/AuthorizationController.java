@@ -70,6 +70,7 @@ public class AuthorizationController {
         String username = tokenService.getUsername(token);
         logger.debug("USERNAME: {}", username);
         List<Role> roles = userService.getRolesByUsername(username);
+        logger.debug("Found roles: {}", roles);
         authentication.setAuthorities(userService.convertRoles(roles));
         authentication.setCredentials(authorization.split(" ")[1]);
         authentication.setPrincipal(new ZevrantPrincipal(username));
