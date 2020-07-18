@@ -11,6 +11,8 @@ import net.zevrant.services.zevrant.oauth2.service.rest.response.TokenResponse;
 import net.zevrant.services.zevrant.oauth2.service.service.TokenService;
 import net.zevrant.services.zevrant.oauth2.service.service.UserService;
 import org.bouncycastle.cms.CMSException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -25,10 +27,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/token")
 public class AuthorizationController {
-
-    private TokenService tokenService;
-    private ObjectMapper objectMapper;
-    private UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
+    private final TokenService tokenService;
+    private final ObjectMapper objectMapper;
+    private final UserService userService;
 
     @Autowired
     public AuthorizationController(TokenService tokenService, UserService userService) {
@@ -66,6 +68,7 @@ public class AuthorizationController {
                 objectMapper.readValue(objectMapper.writeValueAsString(context.getAuthentication()), ZevrantAuthentication.class);
         String token = authorization.split(" ")[1];
         String username = tokenService.getUsername(token);
+        logger.debug("USERNAME: {}", username);
         List<Role> roles = userService.getRolesByUsername(username);
         authentication.setAuthorities(userService.convertRoles(roles));
         authentication.setCredentials(authorization.split(" ")[1]);
