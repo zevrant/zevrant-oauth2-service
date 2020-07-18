@@ -55,4 +55,4 @@ management:
 logging:
   level:
     root: INFO
-    net.zevrant.services.zevrant.oauth2.service: INFO
+    net.zevrant.services.zevrant.oauth2.service: DBEBUG
