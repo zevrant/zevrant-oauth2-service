@@ -59,7 +59,6 @@ public class TokenService {
         }
         OAuth2Authentication authentication = authenticationProxy.get();
         authentication.setAuthenticated(true);
-        userService.saveAuthentication(clientId, authentication);
         OAuth2AccessToken accessToken = tokenServices.createAccessToken(authentication);
         accessToken = accessTokenConverter.enhance(accessToken, authentication);
         Token dbToken = new Token();

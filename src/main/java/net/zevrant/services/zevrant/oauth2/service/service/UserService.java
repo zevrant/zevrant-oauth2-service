@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.cms.CMSException;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -161,16 +160,7 @@ public class UserService {
         return user.getRoles();
     }
 
-    public ZevrantAuthentication getAuthentication(String username) {
-        User user = getUser(username);
-        try {
-            return objectMapper.readValue(user.getCurrentAuthentication(), ZevrantAuthentication.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Unable to deserialize authentication");
-        }
-    }
-
-    public void saveAuthentication(String username, Authentication authentication) {
+    public void saveAuthentication(String username, ZevrantAuthentication authentication) {
         User user = getUser(username);
         try {
             user.setCurrentAuthentication(objectMapper.writeValueAsString(authentication));
