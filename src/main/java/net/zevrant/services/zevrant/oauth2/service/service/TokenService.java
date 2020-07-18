@@ -15,6 +15,8 @@ import net.zevrant.services.zevrant.oauth2.service.repository.TokenRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import org.bouncycastle.cms.CMSException;
 import org.jboss.aerogear.security.otp.Totp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,15 +34,16 @@ import java.util.Optional;
 
 @Service
 public class TokenService {
+    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
-    private TokenRepository tokenRepository;
-    private UserRepository userRepository;
-    private DefaultTokenServices tokenServices;
-    private JwtAccessTokenConverter accessTokenConverter;
-    private AuthenticationManager authenticationManager;
-    private String secret;
-    private PasswordEncoder passwordEncoder;
-    private EncryptionService encryptionService;
+    private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
+    private final DefaultTokenServices tokenServices;
+    private final JwtAccessTokenConverter accessTokenConverter;
+    private final AuthenticationManager authenticationManager;
+    private final String secret;
+    private final PasswordEncoder passwordEncoder;
+    private final EncryptionService encryptionService;
 
     @Autowired
     public TokenService(TokenRepository tokenRepository, DefaultTokenServices defaultTokenServices, UserRepository userRepository,
@@ -94,6 +97,7 @@ public class TokenService {
         OAuth2Request request = new OAuth2Request(clientId);
         Optional<User> detailsProxy = userRepository.findByUsername(clientId);
         if (detailsProxy.isEmpty()) {
+            logger.debug("USER {} NOT FOUND", clientId);
             throw new UserNotFoundException("User " + clientId + " not found");
         }
         User details = detailsProxy.get();
@@ -102,6 +106,7 @@ public class TokenService {
         }
         OAuth2Authentication authentication = new OAuth2Authentication(request, new ClientDetails(details.getUsername(), details.getPassword()));
         if (!passwordEncoder.matches(clientSecret, details.getPassword())) {
+            logger.debug("USER {} provided incorrect password", clientId);
             throw new IncorrectPasswordException("Password for " + clientId + " does not match");
         }
         if (oneTimePad.isEmpty() && details.isTwoFactorEnabeld()) {
@@ -123,8 +128,11 @@ public class TokenService {
     }
 
     public String getUsername(String token) {
-        Optional<Token> tokenProxy =  tokenRepository.findByToken(token);
-        if(tokenProxy.isEmpty()){ throw new UserNotFoundException("Cannot find user for token"); }
+        Optional<Token> tokenProxy = tokenRepository.findByToken(token);
+        if (tokenProxy.isEmpty()) {
+            logger.debug("USER NOT FOUND");
+            throw new UserNotFoundException("Cannot find user for token");
+        }
         return tokenProxy.get().getUsername();
     }
 

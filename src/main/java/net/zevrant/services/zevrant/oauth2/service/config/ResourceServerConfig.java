@@ -12,9 +12,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 @EnableResourceServer
@@ -36,12 +33,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.clientDetailsService = clientDetailsService;
-        List<String> activeProfiles = Arrays.asList(context.getEnvironment().getActiveProfiles());
-        if (activeProfiles.contains("prod")) {
-            openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/email", "/actuator/health"};
-        } else {
-            openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/register", "/indoctrinate", "/email", "/user", "/actuator/health"};
-        }
+        openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/email", "/actuator/health"};
     }
 
     @Override
