@@ -61,7 +61,7 @@ public class TokenService {
         Token dbToken = new Token();
         dbToken.setToken(accessToken.getValue());
         dbToken.setUsername(clientId);
-        dbToken.setExpirationDate(LocalDateTime.now().plusSeconds(accessToken.getExpiresIn() / 1000));
+        dbToken.setExpirationDate(LocalDateTime.now().plusSeconds(accessToken.getExpiresIn()));
         tokenRepository.save(dbToken);
         return accessToken;
     }
@@ -106,6 +106,7 @@ public class TokenService {
         return Optional.of(authentication);
     }
 
+    @Transactional
     public LocalDateTime isAuthorized(String token) {
         Optional<Token> tokenDb = tokenRepository.findByToken(token);
         if (tokenDb.isPresent() && LocalDateTime.now().isAfter(tokenDb.get().getExpirationDate())) {
