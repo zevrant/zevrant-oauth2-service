@@ -35,6 +35,9 @@ public class User implements Serializable, Cloneable {
     @Column
     private Boolean disabled;
 
+    @Column(name = "current_authentication")
+    private String currentAuthentication;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "roleAssociation",
             joinColumns = {
@@ -118,5 +121,13 @@ public class User implements Serializable, Cloneable {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public String getCurrentAuthentication() {
+        return currentAuthentication;
+    }
+
+    public void setCurrentAuthentication(String currentAuthentication) {
+        this.currentAuthentication = currentAuthentication;
     }
 }

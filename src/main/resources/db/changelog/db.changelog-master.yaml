@@ -207,7 +207,22 @@ databaseChangeLog:
             newDataType: bytea
             schemaName: public
             tableName: users
-
-
-
-
+  - changeSet:
+      id: 10
+      author:  zevrant
+      changes:
+        - sql: "insert into roles(role_name, role_desc) values('admin', 'allows user to manage other users')"
+        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(0, 'zevrant', '$2a$31$j72yLQO7QFpslkW8MRWR9OeYg6VpNQ4SWsnuf9NVysuXpQ/4ciJue', 'false', 'false', 'gerethd@gmail.com')"
+        - sql: "insert into role_association(username, role) values('zevrant', 'admin')"
+        - sql: "insert into role_association(username, role) values('zevrant', 'prints')"
+  - changeSet:
+      id: 11
+      author: zevrant
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: current_authentication
+                  type: VARCHAR(2048)
+            schemaName: public
+            tableName: users

@@ -14,6 +14,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: zevrant-oauth2-service
+  liquibase:
+    enabled: true
+
 server:
   port: 9001
   servlet:
@@ -52,4 +55,4 @@ management:
 logging:
   level:
     root: INFO
-    net.zevrant.services.zevrant.oauth2.service: INFO
+    net.zevrant.services.zevrant.oauth2.service: DEBUG
