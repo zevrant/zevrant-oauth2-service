@@ -64,6 +64,7 @@ public class AuthorizationController {
     public Authentication getAuthorization(@RequestHeader String authorization) throws JsonProcessingException {
         SecurityContext context = SecurityContextHolder.getContext();
         String token = authorization.split(" ")[1];
+        tokenService.isAuthorized(token);
         String username = tokenService.getUsername(token);
         logger.debug("USERNAME: {}", username);
         List<Role> roles = userService.getRolesByUsername(username);

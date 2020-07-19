@@ -108,7 +108,13 @@ public class TokenService {
 
     public LocalDateTime isAuthorized(String token) {
         Optional<Token> tokenDb = tokenRepository.findByToken(token);
-        return tokenDb.map(Token::getExpirationDate).orElse(null);
+        if (tokenDb.isPresent() && LocalDateTime.now().isAfter(tokenDb.get().getExpirationDate())) {
+            tokenRepository.deleteTokenByToken(token);
+            throw new TokenExpiredException("Token " + token + " is expired");
+        } else if (tokenDb.isEmpty()) {
+            throw new UserNotFoundException("Cannot find token");
+        }
+        return tokenDb.get().getExpirationDate();
     }
 
     public String getUsername(String token) {
@@ -116,10 +122,6 @@ public class TokenService {
         if (tokenProxy.isEmpty()) {
             logger.debug("USER NOT FOUND");
             throw new UserNotFoundException("Cannot find user for token");
-        }
-        if (LocalDateTime.now().isAfter(tokenProxy.get().getExpirationDate())) {
-            tokenRepository.deleteTokenByToken(token);
-            throw new TokenExpiredException("Token " + token + " is expired");
         }
         return tokenProxy.get().getUsername();
     }
