@@ -6,16 +6,17 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 
 @Configuration
 @EnableResourceServer
 @EnableWebSecurity
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
     private final UserProvider userProvider;
     private final ConfigurableApplicationContext context;
@@ -39,6 +40,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+                .anonymous().and()
                 .authorizeRequests().antMatchers(openPaths).permitAll()
                 .and().csrf().disable();
         // ... more configuration, e.g. for form login
@@ -49,6 +51,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         super.configure(http);
     }
 
-
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(openPaths);
+    }
 
 }
