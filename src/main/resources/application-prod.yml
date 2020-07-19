@@ -25,6 +25,6 @@ zevrant:
 
 logging:
   level:
-    root: ERROR
+    root: INFO
     net.zevrant.services.zevrant.oauth2.service: ERROR
 

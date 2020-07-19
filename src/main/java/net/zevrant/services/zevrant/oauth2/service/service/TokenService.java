@@ -1,12 +1,12 @@
 package net.zevrant.services.zevrant.oauth2.service.service;
 
-import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.InvalidOTPException;
-import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.UserIsDisabledException;
 import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
 import net.zevrant.services.zevrant.oauth2.service.entity.Token;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.exceptions.IncorrectPasswordException;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.InvalidOTPException;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.UserIsDisabledException;
 import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.repository.TokenRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;

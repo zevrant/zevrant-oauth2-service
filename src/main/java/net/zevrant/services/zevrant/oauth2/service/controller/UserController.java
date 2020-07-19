@@ -1,8 +1,8 @@
 package net.zevrant.services.zevrant.oauth2.service.controller;
 
-import net.zevrant.services.zevrant.oauth2.service.controller.exceptions.PasswordMismatchException;
 import net.zevrant.services.zevrant.oauth2.service.entity.Role;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.PasswordMismatchException;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.AddRole;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.ForgotPasswordRequest;
