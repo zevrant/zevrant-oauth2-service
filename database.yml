@@ -34,6 +34,8 @@ spec:
           nfs:
             server: 192.168.0.127
             path: /i-data/420aa917/nfs/keys
+      nodeSelector:
+        architecture: arm
       containers:
         - name: zevrant-oauth2-service-db
           image: postgres:latest
