@@ -49,4 +49,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         super.configure(http);
     }
 
+
+
 }
