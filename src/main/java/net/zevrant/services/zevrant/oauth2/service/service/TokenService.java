@@ -4,10 +4,7 @@ import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
 import net.zevrant.services.zevrant.oauth2.service.entity.Token;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
-import net.zevrant.services.zevrant.oauth2.service.exceptions.IncorrectPasswordException;
-import net.zevrant.services.zevrant.oauth2.service.exceptions.InvalidOTPException;
-import net.zevrant.services.zevrant.oauth2.service.exceptions.UserIsDisabledException;
-import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.*;
 import net.zevrant.services.zevrant.oauth2.service.repository.TokenRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import org.bouncycastle.cms.CMSException;
@@ -119,6 +116,10 @@ public class TokenService {
         if (tokenProxy.isEmpty()) {
             logger.debug("USER NOT FOUND");
             throw new UserNotFoundException("Cannot find user for token");
+        }
+        if (LocalDateTime.now().isAfter(tokenProxy.get().getExpirationDate())) {
+            tokenRepository.deleteTokenByToken(token);
+            throw new TokenExpiredException("Token " + token + " is expired");
         }
         return tokenProxy.get().getUsername();
     }
