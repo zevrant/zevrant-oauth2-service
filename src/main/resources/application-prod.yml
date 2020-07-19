@@ -4,7 +4,7 @@ spring:
   datasource:
     url: 'jdbc:postgresql://zevrant-oauth2-service-db:5432/oauth2'
     username: 'zevrant'
-    password: ${rds.oauth.password}
+    password: ${rds.oauth2.password}
   jpa:
     show-sql: false
     properties:
