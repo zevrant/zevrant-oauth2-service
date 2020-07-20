@@ -6,17 +6,17 @@ public class RegistrationRequest {
 
     private String clientId;
     private String clientSecret;
-    private String registrationCode;
     private List<String> roles;
+    private String fullName;
 
     public RegistrationRequest() {
     }
 
-    public RegistrationRequest(String clientId, String clientSecret, String registrationCode, List<String> roles) {
+    public RegistrationRequest(String clientId, String clientSecret, List<String> roles, String fullName) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-        this.registrationCode = registrationCode;
         this.roles = roles;
+        this.fullName = fullName;
     }
 
     public String getClientId() {
@@ -35,19 +35,19 @@ public class RegistrationRequest {
         this.clientSecret = clientSecret;
     }
 
-    public String getRegistrationCode() {
-        return registrationCode;
-    }
-
-    public void setRegistrationCode(String registrationCode) {
-        this.registrationCode = registrationCode;
-    }
-
     public List<String> getRoles() {
         return roles;
     }
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

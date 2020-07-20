@@ -5,21 +5,28 @@ import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.repository.RegistrationRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.RegistrationCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
 
-import javax.persistence.EntityNotFoundException;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 @Service
 public class RegistrationService {
 
-    private PasswordEncoder passwordEncoder;
-    private UserRepository userRepository;
-    private RegistrationRepository registrationRepository;
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationService.class);
+
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RegistrationRepository registrationRepository;
 
     @Autowired
     public RegistrationService(PasswordEncoder passwordEncoder, UserRepository userRepository, RegistrationRepository registrationRepository) {
@@ -28,8 +35,7 @@ public class RegistrationService {
         this.registrationRepository = registrationRepository;
     }
 
-    public boolean register(String username, String password, String registrationCode) {
-        verifyRegistration(registrationCode);
+    public boolean register(String username, String password) {
         User newUser = new User();
         newUser.setPassword(passwordEncoder.encode(password));
         newUser.setUsername(username);
@@ -38,25 +44,72 @@ public class RegistrationService {
         return true;
     }
 
-    private void verifyRegistration(String registrationCode) {
-        Registration registration = null;
-        try {
-            registration = registrationRepository.getOne(registrationCode);
-
-            if(LocalDateTime.now().isAfter(registration.getExpirationDate())) {
-                registrationRepository.delete(registration);
-                throw new ResourceAccessException("Resource is expired removing from database");
-            }
-        } catch (EntityNotFoundException ex) {
-            throw new ResourceAccessException("Could not find registration code " + registrationCode);
-        }
-        registrationRepository.delete(registration);
-    }
-
     public RegistrationCode indoctrinate() {
         UUID uuid = UUID.randomUUID();
         Registration registration = new Registration(uuid.toString(), LocalDateTime.now().plusDays(1L));
         Registration code = registrationRepository.save(registration);
         return new RegistrationCode(code.getRegistrationCode(), code.getExpirationDate());
+    }
+
+    public void sendEmail(String clientId, String fullName, List<String> requestedRoles) {
+        // Recipient's email ID needs to be mentioned.
+        String to = "gerethd@gmail.com";
+
+        // Sender's email ID needs to be mentioned
+        String from = "gerethd@gmail.com";
+
+        // Assuming you are sending email from through gmails smtp
+        String host = "smtp.gmail.com";
+
+        // Get system properties
+        Properties properties = System.getProperties();
+
+        // Setup mail server
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        // Get the Session object.// and pass username and password
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+
+            protected PasswordAuthentication getPasswordAuthentication() {
+
+                return new PasswordAuthentication("workmailtome@gmail.com", "brbnyganfhfnfktp");
+
+            }
+
+        });
+
+        // Used to debug SMTP issues
+        session.setDebug(true);
+
+        try {
+            // Create a default MimeMessage object.
+            MimeMessage message = new MimeMessage(session);
+
+            // Set From: header field of the header.
+            message.setFrom(new InternetAddress(from));
+
+            // Set To: header field of the header.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+
+            // Set Subject: header field
+            message.setSubject("Indoctrination request for ".concat(fullName));
+
+            String messageText = "Username: ".concat(clientId).concat("\nRequested Roles: ");
+            requestedRoles.forEach((role) -> {
+                messageText.concat(role.concat(","));
+            });
+            // Now set the actual message
+            message.setText(messageText.substring(0, messageText.length() - 2));
+
+            logger.debug("sending...");
+            // Send message
+            Transport.send(message);
+            logger.debug("Sent message successfully....");
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
     }
 }
