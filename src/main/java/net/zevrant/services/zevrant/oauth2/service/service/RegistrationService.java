@@ -2,6 +2,7 @@ package net.zevrant.services.zevrant.oauth2.service.service;
 
 import net.zevrant.services.zevrant.oauth2.service.entity.Registration;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.UserAlreadyExistsException;
 import net.zevrant.services.zevrant.oauth2.service.repository.RegistrationRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.RegistrationCode;
@@ -16,6 +17,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -35,7 +37,11 @@ public class RegistrationService {
         this.registrationRepository = registrationRepository;
     }
 
-    public boolean register(String username, String password) {
+    public boolean register(String username, String password) throws UserAlreadyExistsException {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            throw new UserAlreadyExistsException("The given username has already been taken, please choose a different one and try again");
+        }
         User newUser = new User();
         newUser.setPassword(passwordEncoder.encode(password));
         newUser.setUsername(username);
@@ -95,7 +101,7 @@ public class RegistrationService {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
             // Set Subject: header field
-            message.setSubject("Indoctrination request for ".concat(fullName));
+            message.setSubject("Indoctrination request for " + fullName);
 
             String messageText = "Username: ".concat(clientId).concat("\nRequested Roles: ");
             requestedRoles.forEach((role) -> {

@@ -10,11 +10,14 @@ import net.zevrant.services.zevrant.oauth2.service.exceptions.InvalidPasswordExc
 import net.zevrant.services.zevrant.oauth2.service.repository.RoleRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.AddRole;
+import net.zevrant.services.zevrant.oauth2.service.rest.response.RoleResponse;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.UserResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.cms.CMSException;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -138,6 +141,14 @@ public class UserService {
         List<String> roles = new ArrayList<>();
         roleRepository.findAll().forEach((role -> roles.add(role.getRoleName())));
         return roles;
+    }
+
+    public RoleResponse searchRoles(int page, int pageSize) {
+        List<String> roles = new ArrayList<>();
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Page<Role> pageResponse = roleRepository.findAll(pageRequest);
+        pageResponse.forEach((role -> roles.add(role.getRoleName())));
+        return new RoleResponse(pageResponse.getTotalElements(), roles);
     }
 
     public List<String> convertRoleStrings(List<Role> roles) {

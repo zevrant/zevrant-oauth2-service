@@ -7,6 +7,7 @@ import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.AddRole;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.ForgotPasswordRequest;
 import net.zevrant.services.zevrant.oauth2.service.rest.request.UserUpdate;
+import net.zevrant.services.zevrant.oauth2.service.rest.response.RoleResponse;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.UserResponse;
 import net.zevrant.services.zevrant.oauth2.service.rest.response.UsernameResponse;
 import net.zevrant.services.zevrant.oauth2.service.service.EncryptionService;
@@ -136,7 +137,7 @@ public class UserController {
         return true;
     }
 
-    @PostMapping("/add/role")
+    @PostMapping("/roles")
     @PreAuthorize("hasAuthority('admin')")
     public boolean addRole(@RequestBody AddRole role) {
         userService.addRole(role);
@@ -152,6 +153,12 @@ public class UserController {
             roleStrings.add(role.getRoleName());
         }
         return roleStrings;
+    }
+
+    @GetMapping("/roles/search/{page}/{pageSize}")
+    @PreAuthorize("hasAuthority('admin')")
+    public RoleResponse getAllRoles(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
+        return userService.searchRoles(page, pageSize);
     }
 
 

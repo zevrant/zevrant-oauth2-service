@@ -34,7 +34,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.clientDetailsService = clientDetailsService;
-        openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/email", "/actuator/health"};
+        openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/register", "/actuator/health", "/user/roles/search/*/*"};
     }
 
     @Override
