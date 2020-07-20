@@ -105,10 +105,10 @@ public class RegistrationService {
 
             String messageText = "Username: ".concat(clientId).concat("\nRequested Roles: ");
             for (int i = 0; i < requestedRoles.size(); i++) {
-                messageText.concat(requestedRoles.get(i).concat(","));
+                messageText = messageText.concat(requestedRoles.get(i).concat(","));
             }
             // Now set the actual message
-            message.setText(messageText.substring(0, messageText.length() - 2));
+            message.setText(messageText.substring(0, messageText.length() - 1));
 
             logger.debug("sending...");
             // Send message
