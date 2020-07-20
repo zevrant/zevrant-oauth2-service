@@ -104,9 +104,9 @@ public class RegistrationService {
             message.setSubject("Indoctrination request for " + fullName);
 
             String messageText = "Username: ".concat(clientId).concat("\nRequested Roles: ");
-            requestedRoles.forEach((role) -> {
-                messageText.concat(role.concat(","));
-            });
+            for (int i = 0; i < requestedRoles.size(); i++) {
+                messageText.concat(requestedRoles.get(i).concat(","));
+            }
             // Now set the actual message
             message.setText(messageText.substring(0, messageText.length() - 2));
 
