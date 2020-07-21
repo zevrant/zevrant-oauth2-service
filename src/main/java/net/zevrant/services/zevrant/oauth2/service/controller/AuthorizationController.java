@@ -33,8 +33,8 @@ public class AuthorizationController {
         return context.getAuthentication();
     }
 
-    @DeleteMapping
-    public boolean logout(@RequestBody String username) {
+    @DeleteMapping("/{username}")
+    public boolean logout(@PathVariable("username") String username) {
         return tokenService.logout(username);
     }
 }
