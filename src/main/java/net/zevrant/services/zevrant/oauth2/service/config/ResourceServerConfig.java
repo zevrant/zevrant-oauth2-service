@@ -22,7 +22,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private final UserProvider userProvider;
     private final ConfigurableApplicationContext context;
-    private final ZevrantOauthResponseClient responseClient;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final String[] openPaths;
@@ -30,12 +29,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private final RestTemplate restTemplate;
     private final DefaultTokenServices tokenServices;
 
-    public ResourceServerConfig(UserProvider userProvider, ConfigurableApplicationContext context, ZevrantOauthResponseClient responseClient,
+    public ResourceServerConfig(UserProvider userProvider, ConfigurableApplicationContext context,
                                 PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, ClientDetailsService clientDetailsService,
                                 RestTemplate restTemplate, DefaultTokenServices tokenServices) {
         this.userProvider = userProvider;
         this.context = context;
-        this.responseClient = responseClient;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.clientDetailsService = clientDetailsService;

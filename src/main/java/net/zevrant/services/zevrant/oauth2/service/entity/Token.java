@@ -11,10 +11,10 @@ public class Token {
 
     @Id
     @Column(name = "token", nullable = false, unique = true)
-    private String token;
+    private byte[] token;
 
     @Column(name = "client_id", nullable = false, unique = true)
-    private byte[] clientId;
+    private String clientId;
 
     @Column(name = "refresh_token")
     private String refreshToken;
@@ -22,20 +22,20 @@ public class Token {
     public Token() {
     }
 
-    public String getToken() {
+    public byte[] getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(byte[] token) {
         this.token = token;
     }
 
     public String getClientId() {
-        return new String(clientId);
+        return clientId;
     }
 
     public void setClientId(String clientId) {
-        this.clientId = clientId.getBytes();
+        this.clientId = clientId;
     }
 
     public String getRefreshToken() {

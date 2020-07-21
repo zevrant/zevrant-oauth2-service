@@ -2,7 +2,6 @@ package net.zevrant.services.zevrant.oauth2.service.service;
 
 import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
-import net.zevrant.services.zevrant.oauth2.service.entity.Token;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.exceptions.IncorrectPasswordException;
 import net.zevrant.services.zevrant.oauth2.service.exceptions.InvalidOTPException;
@@ -52,23 +51,6 @@ public class TokenService {
     }
 
     @Transactional
-    public OAuth2AccessToken getAccessToken(String clientId, String clientSecret, Optional<String> oneTimePad) throws CMSException {
-        Optional<OAuth2Authentication> authenticationProxy = authenticate(clientId, clientSecret, oneTimePad);
-        if (authenticationProxy.isEmpty()) {
-            return null;
-        }
-        OAuth2Authentication authentication = authenticationProxy.get();
-        authentication.setAuthenticated(true);
-        OAuth2AccessToken accessToken = tokenServices.createAccessToken(authentication);
-        accessToken = accessTokenConverter.enhance(accessToken, authentication);
-        Token dbToken = new Token();
-        dbToken.setToken(accessToken.getValue());
-        dbToken.setClientId(clientId);
-        tokenRepository.save(dbToken);
-        return accessToken;
-    }
-
-    @Transactional
     public OAuth2AccessToken getAccessToken(User user) {
         OAuth2Request request = new OAuth2Request(user.getUsername());
         OAuth2Authentication authentication = new OAuth2Authentication(request, new ClientDetails(user.getUsername(), user.getPassword()));
@@ -111,7 +93,9 @@ public class TokenService {
     @Transactional
     public boolean logout(String username) {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) {
-            return tokenRepository.deleteTokenByClientId(username) > 0;
+            byte[] token = tokenRepository.findByClientId(username).get().getToken();
+            tokenRepository.deleteTokenByClientId(username);
+            return true;
         }
         return false;
     }
