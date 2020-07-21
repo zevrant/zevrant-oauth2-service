@@ -1,5 +1,6 @@
 package net.zevrant.services.zevrant.oauth2.service.config;
 
+import net.zevrant.services.security.common.secrets.management.filter.OAuthSecurityFilter;
 import net.zevrant.services.zevrant.oauth2.service.users.UserProvider;
 import net.zevrant.services.zevrant.oauth2.service.users.ZevrantClientDetailsService;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableResourceServer
@@ -25,15 +28,18 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
     private final String[] openPaths;
     private final ClientDetailsService clientDetailsService;
+    private final RestTemplate restTemplate;
 
     public ResourceServerConfig(UserProvider userProvider, ConfigurableApplicationContext context, ZevrantOauthResponseClient responseClient,
-                                PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, ClientDetailsService clientDetailsService) {
+                                PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, ClientDetailsService clientDetailsService,
+                                RestTemplate restTemplate) {
         this.userProvider = userProvider;
         this.context = context;
         this.responseClient = responseClient;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.clientDetailsService = clientDetailsService;
+        this.restTemplate = restTemplate;
         openPaths = new String[]{"/authorize", "/token", "/user/forgot-password", "/register", "/actuator/health", "/user/roles/search/*/*"};
     }
 
@@ -48,6 +54,8 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 .getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(new ZevrantClientDetailsService(userProvider))
                 .passwordEncoder(passwordEncoder);
+        http
+                .addFilterBefore(new OAuthSecurityFilter("https://localhost:9001/", this.restTemplate, this.authenticationManager), AnonymousAuthenticationFilter.class);
         super.configure(http);
     }
 
