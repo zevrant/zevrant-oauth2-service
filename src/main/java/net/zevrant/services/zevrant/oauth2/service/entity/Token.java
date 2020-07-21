@@ -4,21 +4,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "token")
+@Table(name = "oauth_access_token")
 public class Token {
 
     @Id
     @Column(name = "token", nullable = false, unique = true)
     private String token;
 
-    @Column(name = "expiration_date", nullable = false)
-    private LocalDateTime expirationDate;
+    @Column(name = "client_id", nullable = false, unique = true)
+    private String clientId;
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
+    @Column(name = "refresh_token")
+    private String refreshToken;
 
     public Token() {
     }
@@ -31,19 +30,19 @@ public class Token {
         this.token = token;
     }
 
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

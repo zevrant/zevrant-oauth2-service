@@ -226,3 +226,9 @@ databaseChangeLog:
                   type: VARCHAR(2048)
             schemaName: public
             tableName: users
+  - changeSet:
+      id: 12
+      author: zevrant
+      changes:
+        sqlFile:
+          path: db/changelog/oauth2-tokenstore.sql

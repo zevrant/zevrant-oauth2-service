@@ -34,7 +34,7 @@ public class UserProvider implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         Optional<User> userProxy = userRepository.findByUsername(clientId);
-        if(userProxy.isPresent()) {
+        if (userProxy.isEmpty()) {
             logger.error("Username {} not found", clientId);
             throw new ClientRegistrationException("Username not found");
         }
@@ -47,6 +47,6 @@ public class UserProvider implements ClientDetailsService {
         if(tokenDb.isEmpty()) {
             return null;
         }
-        return loadClientByClientId(tokenDb.get().getUsername());
+        return loadClientByClientId(tokenDb.get().getClientId());
     }
 }

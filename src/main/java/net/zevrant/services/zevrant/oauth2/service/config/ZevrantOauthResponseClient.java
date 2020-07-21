@@ -10,14 +10,13 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCo
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 public class ZevrantOauthResponseClient implements OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> {
 
-    private TokenRepository tokenRepository;
-    private DefaultAuthorizationCodeTokenResponseClient defaultClient;
+    private final TokenRepository tokenRepository;
+    private final DefaultAuthorizationCodeTokenResponseClient defaultClient;
 
     @Autowired
     public ZevrantOauthResponseClient(TokenRepository userRepository) {
@@ -32,8 +31,7 @@ public class ZevrantOauthResponseClient implements OAuth2AccessTokenResponseClie
         OAuth2AccessTokenResponse response = defaultClient.getTokenResponse(authorizationGrantRequest);
         Token token = new Token();
         token.setToken(response.getAccessToken().getTokenValue());
-        token.setExpirationDate(LocalDateTime.now().plusHours(1));
-        token.setUsername(authorizationGrantRequest.getClientRegistration().getClientId());
+        token.setClientId(authorizationGrantRequest.getClientRegistration().getClientId());
         tokenRepository.save(token);
         return response;
     }

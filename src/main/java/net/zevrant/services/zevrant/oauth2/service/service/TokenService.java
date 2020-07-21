@@ -4,7 +4,10 @@ import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
 import net.zevrant.services.zevrant.oauth2.service.entity.Token;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
-import net.zevrant.services.zevrant.oauth2.service.exceptions.*;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.IncorrectPasswordException;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.InvalidOTPException;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.UserIsDisabledException;
+import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.repository.TokenRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
 import org.bouncycastle.cms.CMSException;
@@ -20,7 +23,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -60,8 +62,7 @@ public class TokenService {
         accessToken = accessTokenConverter.enhance(accessToken, authentication);
         Token dbToken = new Token();
         dbToken.setToken(accessToken.getValue());
-        dbToken.setUsername(clientId);
-        dbToken.setExpirationDate(LocalDateTime.now().plusSeconds(accessToken.getExpiresIn()));
+        dbToken.setClientId(clientId);
         tokenRepository.save(dbToken);
         return accessToken;
     }
@@ -106,25 +107,13 @@ public class TokenService {
         return Optional.of(authentication);
     }
 
-    @Transactional
-    public LocalDateTime isAuthorized(String token) {
-        Optional<Token> tokenDb = tokenRepository.findByToken(token);
-        if (tokenDb.isPresent() && LocalDateTime.now().isAfter(tokenDb.get().getExpirationDate())) {
-            tokenRepository.deleteTokenByToken(token);
-            throw new TokenExpiredException("Token " + token + " is expired");
-        } else if (tokenDb.isEmpty()) {
-            throw new UserNotFoundException("Cannot find token");
-        }
-        return tokenDb.get().getExpirationDate();
-    }
-
     public String getUsername(String token) {
         Optional<Token> tokenProxy = tokenRepository.findByToken(token);
         if (tokenProxy.isEmpty()) {
             logger.debug("USER NOT FOUND");
             throw new UserNotFoundException("Cannot find user for token");
         }
-        return tokenProxy.get().getUsername();
+        return tokenProxy.get().getClientId();
     }
 
     @Transactional
