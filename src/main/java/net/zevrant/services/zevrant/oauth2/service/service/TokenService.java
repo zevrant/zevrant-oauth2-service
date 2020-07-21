@@ -107,18 +107,9 @@ public class TokenService {
         return Optional.of(authentication);
     }
 
-    public String getUsername(String token) {
-        Optional<Token> tokenProxy = tokenRepository.findByToken(token);
-        if (tokenProxy.isEmpty()) {
-            logger.debug("USER NOT FOUND");
-            throw new UserNotFoundException("Cannot find user for token");
-        }
-        return tokenProxy.get().getClientId();
-    }
-
     @Transactional
     public boolean logout(String token) {
-        return tokenRepository.deleteTokenByToken(token) > 0;
+        return tokenRepository.deleteTokenByToken(token.getBytes()) > 0;
     }
 }
 

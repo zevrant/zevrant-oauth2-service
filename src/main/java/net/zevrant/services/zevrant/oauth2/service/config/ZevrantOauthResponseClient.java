@@ -26,7 +26,7 @@ public class ZevrantOauthResponseClient implements OAuth2AccessTokenResponseClie
 
     @Override
     public OAuth2AccessTokenResponse getTokenResponse(OAuth2AuthorizationCodeGrantRequest authorizationGrantRequest) {
-        Optional<Token> isPresent = tokenRepository.findById(authorizationGrantRequest.getClientRegistration().getClientId());
+        Optional<Token> isPresent = tokenRepository.findById(authorizationGrantRequest.getClientRegistration().getClientId().getBytes());
         isPresent.ifPresent(token -> tokenRepository.delete(token));
         OAuth2AccessTokenResponse response = defaultClient.getTokenResponse(authorizationGrantRequest);
         Token token = new Token();

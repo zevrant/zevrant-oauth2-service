@@ -18,20 +18,20 @@ import java.io.IOException;
 
 public class OAuthJdbcFilter implements Filter {
 
-  private static final Logger logger = LoggerFactory.getLogger(OAuthJdbcFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(OAuthJdbcFilter.class);
 
-  private UserProvider userProvider;
-  private AuthenticationManager authenticationManager;
+    private final UserProvider userProvider;
+    private final AuthenticationManager authenticationManager;
 
-  public OAuthJdbcFilter(UserProvider userProvider, AuthenticationManager authenticationManager,
-      ClientDetailsService clientDetailsService) {
-    this.userProvider = userProvider;
-    this.authenticationManager = authenticationManager;
-    authenticationManager.setClientDetailsService(clientDetailsService);
-  }
+    public OAuthJdbcFilter(UserProvider userProvider, AuthenticationManager authenticationManager,
+                           ClientDetailsService clientDetailsService) {
+        this.userProvider = userProvider;
+        this.authenticationManager = authenticationManager;
+        authenticationManager.setClientDetailsService(clientDetailsService);
+    }
 
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
 
   }
 
@@ -41,7 +41,7 @@ public class OAuthJdbcFilter implements Filter {
     String authorization = ((HttpServletRequest) request).getHeader("Authorization").split(" ")[1];
     ClientDetails details;
     try {
-      details= userProvider.locadClientByToken(authorization);
+        details = userProvider.loadClientByToken(authorization);
     } catch(ClientRegistrationException ex) {
       logger.warn("failed to find authorization for user token");
       chain.doFilter(request, response);

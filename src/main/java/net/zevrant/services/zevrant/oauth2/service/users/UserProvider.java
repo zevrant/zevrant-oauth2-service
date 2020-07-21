@@ -42,9 +42,9 @@ public class UserProvider implements ClientDetailsService {
         return new ZevrantsClientDetails(user.getUsername(), user.getPassword());
     }
 
-    public ClientDetails locadClientByToken(String token) {
+    public ClientDetails loadClientByToken(String token) {
         Optional<Token> tokenDb = tokenRepository.findByToken(token);
-        if(tokenDb.isEmpty()) {
+        if (tokenDb.isEmpty()) {
             return null;
         }
         return loadClientByClientId(tokenDb.get().getClientId());

@@ -14,7 +14,7 @@ public class Token {
     private String token;
 
     @Column(name = "client_id", nullable = false, unique = true)
-    private String clientId;
+    private byte[] clientId;
 
     @Column(name = "refresh_token")
     private String refreshToken;
@@ -31,11 +31,11 @@ public class Token {
     }
 
     public String getClientId() {
-        return clientId;
+        return new String(clientId);
     }
 
     public void setClientId(String clientId) {
-        this.clientId = clientId;
+        this.clientId = clientId.getBytes();
     }
 
     public String getRefreshToken() {

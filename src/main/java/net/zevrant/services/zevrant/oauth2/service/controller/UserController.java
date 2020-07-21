@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.cms.CMSException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,8 +51,7 @@ public class UserController {
 
     @GetMapping("/username")
     public UsernameResponse getUsername(@RequestHeader String authorization) {
-
-        return new UsernameResponse(tokenService.getUsername(authorization.split(" ")[1]));
+        return new UsernameResponse(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     }
 
     @GetMapping("/{username}")
