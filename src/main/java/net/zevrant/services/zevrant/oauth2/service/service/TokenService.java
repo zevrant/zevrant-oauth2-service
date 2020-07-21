@@ -15,6 +15,7 @@ import org.jboss.aerogear.security.otp.Totp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -108,8 +109,11 @@ public class TokenService {
     }
 
     @Transactional
-    public boolean logout(String token) {
-        return tokenRepository.deleteTokenByToken(token.getBytes()) > 0;
+    public boolean logout(String username) {
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) {
+            return tokenRepository.deleteTokenByClientId(username) > 0;
+        }
+        return false;
     }
 }
 

@@ -34,7 +34,7 @@ public class AuthorizationController {
     }
 
     @DeleteMapping
-    public boolean logout(@RequestHeader String authorization) {
-        return tokenService.logout(authorization.split(" ")[1]);
+    public boolean logout(@RequestBody String username) {
+        return tokenService.logout(username);
     }
 }

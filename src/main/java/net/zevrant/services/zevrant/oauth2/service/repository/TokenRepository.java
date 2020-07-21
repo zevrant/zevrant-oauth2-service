@@ -16,5 +16,5 @@ public interface TokenRepository extends JpaRepository<Token, byte[]> {
     @Query(nativeQuery = true, value = "select * from oauth_access_token where :token = encode(token, 'base64'")
     Optional<Token> findByToken(@Param("token") String token);
 
-    int deleteTokenByToken(byte[] token);
+    int deleteTokenByClientId(String clientId);
 }
