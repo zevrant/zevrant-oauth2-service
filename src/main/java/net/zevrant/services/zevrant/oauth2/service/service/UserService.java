@@ -1,8 +1,6 @@
 package net.zevrant.services.zevrant.oauth2.service.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zevrant.services.security.common.secrets.management.rest.response.ZevrantAuthentication;
 import net.zevrant.services.security.common.secrets.management.rest.response.ZevrantGrantedAuthority;
 import net.zevrant.services.zevrant.oauth2.service.entity.Role;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
@@ -171,14 +169,4 @@ public class UserService {
         return user.getRoles();
     }
 
-    public void saveAuthentication(String username, ZevrantAuthentication authentication) {
-        User user = getUser(username);
-        try {
-            user.setCurrentAuthentication(objectMapper.writeValueAsString(authentication));
-            userRepository.save(user);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Unable to serialize Authentication");
-        }
-
-    }
 }
