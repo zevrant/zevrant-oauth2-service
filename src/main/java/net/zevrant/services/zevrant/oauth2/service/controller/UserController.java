@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 @RestController
@@ -55,6 +56,7 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
+    @PreAuthorize("hasAnyAuthority('admin', 'dnd-service')")
     public UserResponse getUser(@PathVariable String username) {
         User user = userService.getUser(username);
         return new UserResponse(username, user.getEmailAddress(), userService.convertRoleStrings(user.getRoles()),
@@ -62,6 +64,7 @@ public class UserController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyAuthority('admin', 'dnd-service')")
     public UserResponse updateUser(@RequestBody @Valid UserUpdate userUpdate) throws CertificateEncodingException, IOException, CMSException {
         boolean twoFactorEnabled = userService.getUser(userUpdate.getOriginalUsername()).isTwoFactorEnabeld();
         if (StringUtils.isNotBlank(userUpdate.getPassword())
@@ -123,13 +126,16 @@ public class UserController {
     }
 
     @GetMapping("/all-roles")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public List<String> getAllRoles() {
-        return userService.getAllRoles();
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("dnd-service")) {
+            return userService.getAllRoles(Optional.of("D&D"));
+        }
+        return userService.getAllRoles(Optional.empty());
     }
 
     @PutMapping("/bulk")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public boolean updatesUsers(@RequestBody List<UserResponse> users) throws IOException, CMSException, CertificateEncodingException {
         for (UserResponse user : users) {
             userService.updateUser(user.getUsername(), user.getUsername(), null, user.getEmailAddress(), user.getRoles(), user.isSubscribed(), user.isTwoFactorEnabled());
@@ -138,14 +144,14 @@ public class UserController {
     }
 
     @PostMapping("/roles")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public boolean addRole(@RequestBody AddRole role) {
         userService.addRole(role);
         return true;
     }
 
     @GetMapping("/roles/{username}")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public List<String> getUserRoles(@PathVariable("username") String username) {
         List<Role> roles = userService.getUserRoles(username);
         List<String> roleStrings = new ArrayList<>();
@@ -156,7 +162,7 @@ public class UserController {
     }
 
     @GetMapping("/roles/search/{page}/{pageSize}")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public RoleResponse getAllRoles(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
         return userService.searchRoles(page, pageSize);
     }

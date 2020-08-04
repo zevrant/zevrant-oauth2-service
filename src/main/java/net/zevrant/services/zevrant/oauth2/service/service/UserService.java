@@ -64,10 +64,12 @@ public class UserService {
     public List<Role> convertStrings(List<String> roles) {
         List<Role> newRoles = new ArrayList<>();
         if (roles != null && !roles.isEmpty()) {
-            roles.forEach((role) -> {
+            for (String role : roles) {
                 Optional<Role> roleProxy = roleRepository.findById(role);
-                roleProxy.ifPresent(newRoles::add);
-            });
+                if (roleProxy.isPresent()) {
+                    newRoles.add(roleProxy.get());
+                }
+            }
         }
 
         return newRoles;
@@ -135,9 +137,14 @@ public class UserService {
         return userResponses;
     }
 
-    public List<String> getAllRoles() {
+    public List<String> getAllRoles(Optional<String> roleTypeProxy) {
         List<String> roles = new ArrayList<>();
-        roleRepository.findAll().forEach((role -> roles.add(role.getRoleName())));
+        roleRepository.findAll().stream().filter((role) -> {
+            if (roleTypeProxy.isPresent()) {
+                return roleTypeProxy.get().equals(role.getRoleType());
+            }
+            return true;
+        }).forEach((role -> roles.add(role.getRoleName())));
         return roles;
     }
 

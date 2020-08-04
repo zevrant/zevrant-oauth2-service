@@ -244,4 +244,4 @@ databaseChangeLog:
             schemaName: public
             tableName: roles
         - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows dnd to make service to service calls', 'service')"
-        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'dnd-service', '$2a$10$V/DATOfdi1/l6/.GQO2gM.ymCfu/VQT/Qv1VKXAsE1Bpx6KRTbJbe', 'false', 'false', 'gerethd@gmail.com')"
+        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'dnd-service', '$2a$10$GCmyLf.7jmNLNtg5uQx.4.cqFM4KRin8AfcjQPMRkDGgjNU1/cXCm', 'false', 'false', 'gerethd@gmail.com')"

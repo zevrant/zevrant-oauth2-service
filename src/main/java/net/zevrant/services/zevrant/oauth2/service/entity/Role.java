@@ -14,6 +14,9 @@ public class Role {
     @Column(name = "roleDesc")
     private String roleDescription;
 
+    @Column(name = "role_type")
+    private String roleType;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "roleAssociation",
             inverseJoinColumns = {
@@ -50,5 +53,13 @@ public class Role {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
     }
 }

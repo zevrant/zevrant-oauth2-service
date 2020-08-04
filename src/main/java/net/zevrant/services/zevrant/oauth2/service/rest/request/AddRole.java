@@ -4,8 +4,9 @@ public class AddRole {
 
     private String roleName;
     private String roleDesc;
+    private String roleType;
 
-    public AddRole(String roleName, String roleDesc) {
+    public AddRole(String roleName, String roleDesc, String roleType) {
         this.roleName = roleName;
         this.roleDesc = roleDesc;
     }
@@ -24,5 +25,13 @@ public class AddRole {
 
     public void setRoleDesc(String roleDesc) {
         this.roleDesc = roleDesc;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
     }
 }

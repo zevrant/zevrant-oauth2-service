@@ -4,7 +4,7 @@ spring:
   profiles:
     active: local
   datasource:
-    url: jdbc:postgresql://localhost:5432/oauth2?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5433/oauth2?createDatabaseIfNotExist=true
     username: sa
     password: example
   jpa:
@@ -16,6 +16,7 @@ spring:
     name: zevrant-oauth2-service
   liquibase:
     enabled: true
+    change-log: classpath:db/changelog/db.changelog-master-local.yaml
 
 server:
   port: 9001
