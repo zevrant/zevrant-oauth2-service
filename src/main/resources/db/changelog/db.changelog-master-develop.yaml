@@ -220,7 +220,7 @@ databaseChangeLog:
       author: zevrant
       changes:
         - addColumn:
-            columns:roles(role_name, role_desc, role_type) values('dnd-service', 'allows dnd to make service to service calls', 'service')
+            columns:
               - column:
                   name: current_authentication
                   type: VARCHAR(2048)
