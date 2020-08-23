@@ -250,4 +250,16 @@ databaseChangeLog:
       author:  zevrant
       changes:
         - sql: "update users set password = '$2a$10$O5P.KDVxEGYwnb0DUB7FK.lJSsguN3SPS0uFbk7p1DCoBeioWRmZa' where username = 'dnd-service"
-
+  - changeSet:
+      id: 15
+      author:  zevrant
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: role_type
+                  type: VARCHAR(255)
+            schemaName: public
+            tableName: roles
+        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-99, 'test-admin', '$2a$10$saOcv8npx/f8Rzuy9kl5EO/tduYhZb04/woD6KqviRolMw8SQuny.', 'false', 'false', 'gerethd@gmail.com')"
+        - sql: "insert into role_association(username, role) values('test-admin, admin)"
