@@ -220,7 +220,7 @@ databaseChangeLog:
       author: zevrant
       changes:
         - addColumn:
-            columns:
+            columns:roles(role_name, role_desc, role_type) values('dnd-service', 'allows dnd to make service to service calls', 'service')
               - column:
                   name: current_authentication
                   type: VARCHAR(2048)
@@ -246,7 +246,8 @@ databaseChangeLog:
         - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows dnd to make service to service calls', 'service')"
         - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'dnd-service', '$2a$10$GCmyLf.7jmNLNtg5uQx.4.cqFM4KRin8AfcjQPMRkDGgjNU1/cXCm', 'false', 'false', 'gerethd@gmail.com')"
   - changeSet:
-      id: 13
+      id: 14
       author:  zevrant
       changes:
         - sql: "update users set password = '$2a$10$O5P.KDVxEGYwnb0DUB7FK.lJSsguN3SPS0uFbk7p1DCoBeioWRmZa' where username = 'dnd-service"
+
