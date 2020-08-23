@@ -249,7 +249,7 @@ databaseChangeLog:
       id: 14
       author:  zevrant
       changes:
-        - sql: "update users set password = '$2a$10$O5P.KDVxEGYwnb0DUB7FK.lJSsguN3SPS0uFbk7p1DCoBeioWRmZa' where username = 'dnd-service"
+        - sql: "update users set password = '$2a$10$O5P.KDVxEGYwnb0DUB7FK.lJSsguN3SPS0uFbk7p1DCoBeioWRmZa' where username = 'dnd-service'"
   - changeSet:
       id: 15
       author:  zevrant
