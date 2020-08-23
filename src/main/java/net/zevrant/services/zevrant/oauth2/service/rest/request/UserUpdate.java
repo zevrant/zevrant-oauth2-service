@@ -10,7 +10,6 @@ public class UserUpdate {
     private String username;
     private String password;
     private String passwordConfirmation;
-    @NotNull
     private String emailAddress;
     @NotNull
     private boolean subscribed;
