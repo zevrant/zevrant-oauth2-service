@@ -253,6 +253,15 @@ databaseChangeLog:
   - changeSet:
       id: 15
       author:  zevrant
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists:
+            tableName: roles
+            schemaName: public
+            columns:
+              - column:
+                  name: role_type
+                  type: VARCHAR(255)
       changes:
         - addColumn:
             columns:
