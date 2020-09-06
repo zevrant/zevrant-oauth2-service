@@ -261,5 +261,5 @@ databaseChangeLog:
                   type: VARCHAR(255)
             schemaName: public
             tableName: roles
-        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-99, 'test-admin', '$2a$10$saOcv8npx/f8Rzuy9kl5EO/tduYhZb04/woD6KqviRolMw8SQuny.', 'false', 'false', 'gerethd@gmail.com')"
-        - sql: "insert into role_association(username, role) values('test-admin, admin)"
+        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) if not exists values(-99, 'test-admin', '$2a$10$saOcv8npx/f8Rzuy9kl5EO/tduYhZb04/woD6KqviRolMw8SQuny.', 'false', 'false', 'gerethd@gmail.com')"
+        - sql: "insert into role_association(username, role) if not exists values('test-admin, admin)"
