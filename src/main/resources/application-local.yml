@@ -1,6 +1,6 @@
 zevrant:
   ssl:
-    key-store: /storage/keys/zevrant-services.p12
+    key-store: ~/zevrant-services.p12
     key-store-password: ${ssl.keystore.password}
   bucketName:
   keystore:
