@@ -249,6 +249,6 @@ databaseChangeLog:
         id: 14
         author:  zevrant
         changes:
-          - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(0, 'pmmurphy', '$2y$12$nCXXkYWKnpA3xPuVuWhsQObcSSyyNlGICShsErWZmLr8ipOd6a/Ie', 'false', 'false', 'gerethd@gmail.com')"
+          - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-3, 'pmmurphy', '$2y$12$nCXXkYWKnpA3xPuVuWhsQObcSSyyNlGICShsErWZmLr8ipOd6a/Ie', 'false', 'false', 'gerethd@gmail.com')"
           - sql: "insert into role_association(username, role) values('pmmurphy', 'admin')"
           - sql: "insert into role_association(username, role) values('pmmurphy', 'prints')"
