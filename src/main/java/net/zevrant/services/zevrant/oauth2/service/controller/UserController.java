@@ -52,7 +52,8 @@ public class UserController {
 
     @GetMapping("/username")
     public UsernameResponse getUsername(@RequestHeader("Authorization") String authorization) {
-        return new UsernameResponse();
+//        return new UsernameResponse();
+        return null;
     }
 
     @GetMapping("/{username}")
