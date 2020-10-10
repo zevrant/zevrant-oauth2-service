@@ -1,0 +1,8 @@
+zevrant:
+  ssl:
+    key-store: /storage/keys/zevrant-services.p12
+    key-store-password: ${ssl.keystore.password}
+  bucketName:
+  keystore:
+  encrypted:
+    properties: ssl/keystore/password,rds/oauth2/password
