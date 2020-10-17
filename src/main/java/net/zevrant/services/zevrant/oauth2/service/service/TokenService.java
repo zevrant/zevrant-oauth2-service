@@ -2,6 +2,7 @@ package net.zevrant.services.zevrant.oauth2.service.service;
 
 import net.zevrant.services.zevrant.oauth2.service.entity.ClientDetails;
 import net.zevrant.services.zevrant.oauth2.service.entity.OAuth2Request;
+import net.zevrant.services.zevrant.oauth2.service.entity.Token;
 import net.zevrant.services.zevrant.oauth2.service.entity.User;
 import net.zevrant.services.zevrant.oauth2.service.exceptions.IncorrectPasswordException;
 import net.zevrant.services.zevrant.oauth2.service.exceptions.InvalidOTPException;
@@ -88,6 +89,11 @@ public class TokenService {
             return Optional.of(authentication);
         }
         return Optional.of(authentication);
+    }
+
+    public String getUsernameByToken(String token) {
+        Optional<Token> tokenProxy = tokenRepository.findByToken(token);
+        return tokenProxy.map(Token::getClientId).orElse(null);
     }
 
     @Transactional
