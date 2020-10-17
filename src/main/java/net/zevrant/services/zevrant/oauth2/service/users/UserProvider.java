@@ -43,7 +43,7 @@ public class UserProvider implements ClientDetailsService {
     }
 
     public ClientDetails loadClientByToken(String token) {
-        Optional<Token> tokenDb = tokenRepository.findTokenByToken(token);
+        Optional<Token> tokenDb = tokenRepository.findTokenByToken(token.getBytes());
         if (tokenDb.isEmpty()) {
             return null;
         }

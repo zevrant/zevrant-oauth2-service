@@ -94,7 +94,7 @@ public class TokenService {
     }
 
     public String getUsernameByToken(String token) {
-        Optional<Token> tokenProxy = tokenRepository.findTokenByToken(token);
+        Optional<Token> tokenProxy = tokenRepository.findTokenByToken(token.getBytes());
         return tokenProxy.map(Token::getClientId).orElse(null);
     }
 
