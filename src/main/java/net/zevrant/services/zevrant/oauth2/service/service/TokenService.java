@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -94,8 +95,8 @@ public class TokenService {
     }
 
     public String getUsernameByToken(String token) {
-        Optional<Token> tokenProxy = tokenRepository.findByToken(token);
-        return tokenProxy.map(Token::getClientId).orElse(null);
+        List<Token> tokenList = tokenRepository.findAllByToken(token);
+        return tokenList.get(0).getClientId();
     }
 
     @Transactional

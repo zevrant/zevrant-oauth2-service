@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,7 +15,7 @@ public interface TokenRepository extends JpaRepository<Token, byte[]> {
     Optional<Token> findByTokenAndClientId(byte[] token, String username);
 
     @Query(nativeQuery = true, value = "select * from oauth_access_token where :token = $1")
-    Optional<Token> findByToken(@Param("token") String token);
+    List<Token> findAllByToken(@Param("token") String token);
 
     Optional<Token> findByClientId(String clientId);
 
