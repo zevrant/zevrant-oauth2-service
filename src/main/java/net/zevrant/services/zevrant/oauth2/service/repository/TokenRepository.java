@@ -14,8 +14,7 @@ public interface TokenRepository extends JpaRepository<Token, byte[]> {
 
     Optional<Token> findByTokenAndClientId(byte[] token, String username);
 
-    @Query(nativeQuery = true, value = "select * from oauth_access_token where :token = $1")
-    List<Token> findAllByToken(@Param("token") String token);
+    Optional<Token> findTokenByToken(String token);
 
     Optional<Token> findByClientId(String clientId);
 
