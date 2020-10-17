@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Primary
@@ -43,10 +44,10 @@ public class UserProvider implements ClientDetailsService {
     }
 
     public ClientDetails loadClientByToken(String token) {
-        Optional<Token> tokenDb = tokenRepository.findByToken(token);
+        List<Token> tokenDb = tokenRepository.findAllByToken(token);
         if (tokenDb.isEmpty()) {
             return null;
         }
-        return loadClientByClientId(tokenDb.get().getClientId());
+        return loadClientByClientId(tokenDb.get(0).getClientId());
     }
 }
