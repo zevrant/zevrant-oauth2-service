@@ -52,9 +52,7 @@ public class UserController {
 
     @GetMapping("/username")
     public UsernameResponse getUsername(@RequestHeader("Authorization") String authorization) {
-        System.out.println(authorization);
         String token = tokenService.getUsernameByToken(authorization.split(" ")[1]);
-        System.out.println(token);
         return new UsernameResponse(token);
     }
 
