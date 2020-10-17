@@ -53,6 +53,8 @@ public class TokenService {
 
     @Transactional
     public OAuth2AccessToken getAccessToken(User user) {
+        Optional <Token> tokenProxy = tokenRepository.findByClientId(user.getUsername());
+        tokenProxy.ifPresent(token -> tokenRepository.deleteTokenByClientId(token.getClientId()));
         OAuth2Request request = new OAuth2Request(user.getUsername());
         OAuth2Authentication authentication = new OAuth2Authentication(request, new ClientDetails(user.getUsername(), user.getPassword()));
         OAuth2AccessToken accessToken = tokenServices.createAccessToken(authentication);
