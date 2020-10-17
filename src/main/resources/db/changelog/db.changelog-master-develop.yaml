@@ -234,7 +234,7 @@ databaseChangeLog:
           path: db/changelog/oauth2-tokenstore.sql
   - changeSet:
       id: 13
-      author:  zevrant
+      author: zevrant
       changes:
         - addColumn:
             columns:
@@ -246,7 +246,29 @@ databaseChangeLog:
         - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows dnd to make service to service calls', 'service')"
         - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'dnd-service', '$2a$10$GCmyLf.7jmNLNtg5uQx.4.cqFM4KRin8AfcjQPMRkDGgjNU1/cXCm', 'false', 'false', 'gerethd@gmail.com')"
   - changeSet:
-      id: 13
+      id: 14
       author:  zevrant
       changes:
-        - sql: "update users set password = '$2a$10$O5P.KDVxEGYwnb0DUB7FK.lJSsguN3SPS0uFbk7p1DCoBeioWRmZa' where username = 'dnd-service"
+        - sql: "update users set password = '$2a$10$O5P.KDVxEGYwnb0DUB7FK.lJSsguN3SPS0uFbk7p1DCoBeioWRmZa' where username = 'dnd-service'"
+  - changeSet:
+      id: 15
+      author:  zevrant
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists:
+            tableName: roles
+            schemaName: public
+            columns:
+              - column:
+                  name: role_type
+                  type: VARCHAR(255)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: role_type
+                  type: VARCHAR(255)
+            schemaName: public
+            tableName: roles
+        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) if not exists values(-99, 'test-admin', '$2a$10$saOcv8npx/f8Rzuy9kl5EO/tduYhZb04/woD6KqviRolMw8SQuny.', 'false', 'false', 'gerethd@gmail.com')"
+        - sql: "insert into role_association(username, role) if not exists values('test-admin, admin)"

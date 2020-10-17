@@ -55,5 +55,5 @@ management:
 
 logging:
   level:
-    root: error
+    root: info
     net.zevrant.services: debug

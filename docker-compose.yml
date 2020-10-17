@@ -1,51 +1,12 @@
 version: '3.5'
 services:
-  zevrant-oauth2-service:
-    networks:
-      - microservices
-      - secret
-    ports:
-      - "443:9001"
-    depends_on:
-      - zevrant-oauth2-service-db
-    image: zevrant/zevrant-oauth2-service:${VERSION}
-    deploy:
-      placement:
-        constraints:
-          - node.role == worker
-    environment:
-      VERSION:
-      AWS_ACCESS_KEY_ID:
-      AWS_SECRET_ACCESS_KEY:
-      AWS_DEFAULT_REGION: 'us-east-1'
-      AWS_DEFAULT_OUTPUT: json
   zevrant-oauth2-service-db:
-    networks:
-      - secret
-    deploy:
-      placement:
-        constraints:
-          - node.labels.usage == db
-    volumes:
-      - /storage/keys/db/oauth2/:/storage/keys/db/oauth2/
     ports:
-      - "5432:5432"
+      - "5433:5432"
     image: postgres:latest
     environment:
-      PGDATA: /storage/keys/db/oauth2/
-      POSTGRES_PASSWORD:
-      POSTGRES_USER: zevrant
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: example
       POSTGRES_DB: oauth2
-networks:
-  microservices:
-    external:
-      name: zevrant-discovery-service_microservices
-  secret:
-    # use the bridge driver, but enable IPv6
-    driver: overlay
-    attachable: true
-    ipam:
-      driver: default
-      config:
-        - subnet: 173.16.238.0/28
+
 
