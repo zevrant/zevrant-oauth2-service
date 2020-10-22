@@ -252,3 +252,10 @@ databaseChangeLog:
           - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-3, 'pmmurphy', '$2y$12$nCXXkYWKnpA3xPuVuWhsQObcSSyyNlGICShsErWZmLr8ipOd6a/Ie', 'false', 'false', 'gerethd@gmail.com')"
           - sql: "insert into role_association(username, role) values('pmmurphy', 'admin')"
           - sql: "insert into role_association(username, role) values('pmmurphy', 'prints')"
+    - changeSet:
+        id: 15
+        author:  zevrant
+        changes:
+          - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-99, 'test-admin', '$2a$10$saOcv8npx/f8Rzuy9kl5EO/tduYhZb04/woD6KqviRolMw8SQuny.', 'false', 'false', 'gerethd@gmail.com')"
+          - sql: "insert into role_association(username, role) values('test-admin', 'admin')"
+

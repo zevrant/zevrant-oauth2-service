@@ -10,6 +10,7 @@ import net.zevrant.services.zevrant.oauth2.service.exceptions.UserIsDisabledExce
 import net.zevrant.services.zevrant.oauth2.service.exceptions.UserNotFoundException;
 import net.zevrant.services.zevrant.oauth2.service.repository.TokenRepository;
 import net.zevrant.services.zevrant.oauth2.service.repository.UserRepository;
+import org.apache.commons.codec.Charsets;
 import org.bouncycastle.cms.CMSException;
 import org.jboss.aerogear.security.otp.Totp;
 import org.slf4j.Logger;
@@ -93,15 +94,11 @@ public class TokenService {
         return Optional.of(authentication);
     }
 
-    public String getUsernameByToken(String token) {
-        Optional<Token> tokenProxy = tokenRepository.findTokenByToken(token.getBytes());
-        return tokenProxy.map(Token::getClientId).orElse(null);
-    }
 
     @Transactional
     public boolean logout(String username) {
         if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) {
-            byte[] token = tokenRepository.findByClientId(username).get().getToken();
+            String token = new String(tokenRepository.findByClientId(username).get().getToken());
             tokenRepository.deleteTokenByClientId(username);
             return true;
         }

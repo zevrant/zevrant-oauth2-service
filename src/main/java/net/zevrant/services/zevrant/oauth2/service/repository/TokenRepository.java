@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface TokenRepository extends JpaRepository<Token, byte[]> {
 
-    Optional<Token> findByTokenAndClientId(byte[] token, String username);
+    Optional<Token> findByTokenAndClientId(String token, String username);
 
     Optional<Token> findTokenByToken(byte[] token);
 
