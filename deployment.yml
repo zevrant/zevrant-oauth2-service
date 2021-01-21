@@ -1,3 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zevrant-oauth2-service
+spec:
+  ports:
+    - port: 443
+      targetPort: 9001
+  selector:
+    app: zevrant-oauth2-service
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,24 +29,9 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
-      nodeSelector:
-        use: this
       containers:
         - name: zevrant-oauth2-service
           image: zevrant/zevrant-oauth2-service:$VERSION
-          env:
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: aws-access-key
-                  key: aws-access-key-id
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: aws-secret-key
-                  key: aws-secret-key
-            - name: ENVIRONMENT
-              value: $ENVIRONMENT
           ports:
             - containerPort: 9001
           readinessProbe:

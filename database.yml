@@ -15,6 +15,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zevrant-oauth2-service-db-deployment
+  annotations:
+    iam.amazonaws.com/role: OauthServiceRole
   labels:
     app: zevrant-oauth2-service-db
 spec:
@@ -32,13 +34,17 @@ spec:
       volumes:
         - name: database
           nfs:
-            server: 192.168.0.127
+            server: 192.168.1.11
             path: /i-data/420aa917/nfs/keys
       nodeSelector:
         architecture: arm
+      tolerations:
+        - key: kube2iam
+          value: kube2iam
+          effect: NoSchedule
       containers:
         - name: zevrant-oauth2-service-db
-          image: postgres:latest
+          image: postgres:12
           volumeMounts:
             - name: database
               mountPath: /storage/keys/
