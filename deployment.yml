@@ -46,3 +46,9 @@ spec:
               path: /zevrant-oauth2-service/actuator/health
               port: 9001
             initialDelaySeconds: 10
+          env:
+            name: http_proxy
+            valueFrom:
+              secretKeyRef:
+                name: proxy
+                key: proxy
