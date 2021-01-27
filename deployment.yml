@@ -47,8 +47,8 @@ spec:
               port: 9001
             initialDelaySeconds: 10
           env:
-            name: http_proxy
-            valueFrom:
-              secretKeyRef:
-                name: proxy
-                key: proxy
+            - name: http_proxy
+              valueFrom:
+                secretKeyRef:
+                  name: proxy
+                  key: proxy
