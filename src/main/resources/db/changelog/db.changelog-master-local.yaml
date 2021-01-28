@@ -1,261 +1,254 @@
 databaseChangeLog:
-    - changeSet:
-        id: 1
-        author: zevrant
-        changes:
-          - createTable:
-              tableName: USERS
-              columns:
-                - column:
-                    name: ID
-                    type: int
-                    autoIncrement: true
-                    constraints:
-                      primaryKey: true
-                      nullable: false
-                - column:
-                    name: username
-                    type: varchar(255)
-                    constraints:
-                      nullable: false
-                      unique: true
-                - column:
-                    name: password
-                    type: varchar(60)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: two_factor_secret
-                    type: varchar(512)
-                - column:
-                    name: two_factor_enabled
-                    type: boolean
-                - column:
-                    name: subscribed
-                    type: boolean
-                - column:
-                    name: email_address
-                    type: varchar(255)
-    - changeSet:
-        id: 2
-        author: zevrant
-        changes:
-          - createSequence:
-              dataType: int
-              incrementBy: 1
-              sequenceName: USERS
-              minValue: 0
-              maxValue: 1000
-              schemaName: public
-              startValue: 1
-              allocationSize: 1
-    - changeSet:
-        id: 3
-        author: zevrant
-        changes:
-          - createTable:
-              tableName: REGISTER
-              columns:
-                - column:
-                    name: registration_code
-                    type: varchar(50)
-                    constraints:
-                      primaryKey: true
-                      nullable: false
-                - column:
-                    name: expiration_date
-                    type: varchar(50)
-                    constraints:
-                      nullable: false
-                      unique: true
-    - changeSet:
-        id: 4
-        author: zevrant
-        changes:
-          - createTable:
-              tableName: token
-              columns:
-                - column:
-                    name: token
-                    type: varchar(2048)
-                    constraints:
-                      primaryKey: true
-                      nullable: false
-                - column:
-                    name: expiration_date
-                    type: varchar(50)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: username
-                    type: varchar(50)
-                    constraints:
-                      nullable: false
-          - createTable:
-              tableName: scopes
-              columns:
-                - column:
-                    name: username
-                    type: varchar(50)
-                    constraints:
-                      primaryKey: true
-                      nullable: false
-                - column:
-                    name: scope
-                    type: varchar(50)
-                    constraints:
-                      nullable: false
-    - changeSet:
-        id: 5
-        author: zevrant
-        changes:
-          - createTable:
-              tableName: role_association
-              columns:
-                - column:
-                    name: username
-                    type: varchar(50)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: role
-                    type: varchar(50)
-                    constraints:
-                      nullable: false
-          - createTable:
-              tableName: roles
-              columns:
-                - column:
-                    name: role_name
-                    type: varchar(50)
-                    constraints:
-                      nullable: false
-                - column:
-                    name: role_desc
-                    type: varchar(512)
-                    constraints:
-                      nullable: false
-    - changeSet:
-        id: 6
-        author: zevrant
-        changes:
-          - sql:
-              sql: insert into roles("role_name", "role_desc") values ('prints', 'Allows users to access prints');
-    - changeSet:
-        id: 7
-        author: zevrant
-        changes:
-          - addForeignKeyConstraint:
-              baseColumnNames: username
-              baseTableName: token
-              baseTableSchemaName: public
-              constraintName: tokenUsernameForeignKey
-              onDelete: CASCADE
-              onUpdate: RESTRICT
-              referencedColumnNames: username
-              referencedTableName: USERS
-              referencedTableSchemaName: public
-              validate: true
-          - addForeignKeyConstraint:
-              baseColumnNames: username
-              baseTableName: role_association
-              baseTableSchemaName: public
-              constraintName: rolesUsernameForeignKey
-              onDelete: CASCADE
-              onUpdate: RESTRICT
-              referencedColumnNames: username
-              referencedTableName: USERS
-              referencedTableSchemaName: public
-              validate: true
-          - addForeignKeyConstraint:
-              baseColumnNames: username
-              baseTableName: scopes
-              baseTableSchemaName: public
-              constraintName: scopesUsernameForeignKey
-              onDelete: CASCADE
-              onUpdate: RESTRICT
-              referencedColumnNames: username
-              referencedTableName: USERS
-              referencedTableSchemaName: public
-              validate: true
-    - changeSet:
-        id: 8
-        author: zevrant
-        changes:
-          - addColumn:
-              columns:
-                - column:
-                    name: disabled
-                    type: boolean
-              schemaName: public
-              tableName: users
-    - changeSet:
-        id: modifyDataType-example
-        author: liquibase-docs
-        changes:
-          - modifyDataType:
-              columnName: two_factor_secret
-              newDataType: varchar(2000)
-              schemaName: public
-              tableName: users
-    - changeSet:
-        id: 9
-        author: zevrant
-        changes:
-          - modifyDataType:
-              columnName: two_factor_secret
-              newDataType: bytea
-              schemaName: public
-              tableName: users
-    - changeSet:
-        id: 10
-        author:  zevrant
-        changes:
-          - sql: "insert into roles(role_name, role_desc) values('admin', 'allows user to manage other users')"
-          - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(0, 'zevrant', '$2a$31$j72yLQO7QFpslkW8MRWR9OeYg6VpNQ4SWsnuf9NVysuXpQ/4ciJue', 'false', 'false', 'gerethd@gmail.com')"
-          - sql: "insert into role_association(username, role) values('zevrant', 'admin')"
-          - sql: "insert into role_association(username, role) values('zevrant', 'prints')"
-    - changeSet:
-        id: 11
-        author: zevrant
-        changes:
-          - addColumn:
-              columns:
-                - column:
-                    name: current_authentication
-                    type: VARCHAR(2048)
-              schemaName: public
-              tableName: users
-    - changeSet:
-        id: 12
-        author: zevrant
-        changes:
-          sqlFile:
-            path: db/changelog/oauth2-tokenstore.sql
-    - changeSet:
-        id: 13
-        author:  zevrant
-        changes:
-          - addColumn:
-              columns:
-                - column:
-                    name: role_type
-                    type: VARCHAR(255)
-              schemaName: public
-              tableName: roles
-          - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows dnd to make service to service calls', 'service')"
-          - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'dnd-service', '$2a$31$jojJUnJMfQILOgfXS2GkTuZz8CE/hmdKqsFrzuX9TXX2RzytG.I4y', 'false', 'false', 'gerethd@gmail.com')"
-    - changeSet:
-        id: 14
-        author:  zevrant
-        changes:
-          - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-3, 'pmmurphy', '$2y$12$nCXXkYWKnpA3xPuVuWhsQObcSSyyNlGICShsErWZmLr8ipOd6a/Ie', 'false', 'false', 'gerethd@gmail.com')"
-          - sql: "insert into role_association(username, role) values('pmmurphy', 'admin')"
-          - sql: "insert into role_association(username, role) values('pmmurphy', 'prints')"
-    - changeSet:
-        id: 15
-        author:  zevrant
-        changes:
-          - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-99, 'test-admin', '$2a$10$saOcv8npx/f8Rzuy9kl5EO/tduYhZb04/woD6KqviRolMw8SQuny.', 'false', 'false', 'gerethd@gmail.com')"
-          - sql: "insert into role_association(username, role) values('test-admin', 'admin')"
-
+  - changeSet:
+      id: 1
+      author: zevrant
+      changes:
+        - createTable:
+            tableName: USERS
+            columns:
+              - column:
+                  name: ID
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: two_factor_secret
+                  type: varchar(512)
+              - column:
+                  name: two_factor_enabled
+                  type: boolean
+              - column:
+                  name: subscribed
+                  type: boolean
+              - column:
+                  name: email_address
+                  type: varchar(255)
+  - changeSet:
+      id: 2
+      author: zevrant
+      changes:
+        - createSequence:
+            dataType: int
+            incrementBy: 1
+            sequenceName: USERS
+            minValue: 0
+            maxValue: 1000
+            schemaName: public
+            startValue: 1
+            allocationSize: 1
+  - changeSet:
+      id: 3
+      author: zevrant
+      changes:
+        - createTable:
+            tableName: REGISTER
+            columns:
+              - column:
+                  name: registration_code
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: expiration_date
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+  - changeSet:
+      id: 4
+      author: zevrant
+      changes:
+        - createTable:
+            tableName: token
+            columns:
+              - column:
+                  name: token
+                  type: varchar(2048)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: expiration_date
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: scopes
+            columns:
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: scope
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 5
+      author: zevrant
+      changes:
+        - createTable:
+            tableName: role_association
+            columns:
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: role_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_desc
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 6
+      author: zevrant
+      changes:
+        - sql:
+            sql: insert into roles("role_name", "role_desc") values ('prints', 'Allows users to access prints');
+  - changeSet:
+      id: 7
+      author: zevrant
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: username
+            baseTableName: token
+            baseTableSchemaName: public
+            constraintName: tokenUsernameForeignKey
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: username
+            referencedTableName: USERS
+            referencedTableSchemaName: public
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: username
+            baseTableName: role_association
+            baseTableSchemaName: public
+            constraintName: rolesUsernameForeignKey
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: username
+            referencedTableName: USERS
+            referencedTableSchemaName: public
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: username
+            baseTableName: scopes
+            baseTableSchemaName: public
+            constraintName: scopesUsernameForeignKey
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: username
+            referencedTableName: USERS
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
+      id: 8
+      author: zevrant
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: disabled
+                  type: boolean
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: modifyDataType-example
+      author: liquibase-docs
+      changes:
+        - modifyDataType:
+            columnName: two_factor_secret
+            newDataType: varchar(2000)
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: 9
+      author: zevrant
+      changes:
+        - modifyDataType:
+            columnName: two_factor_secret
+            newDataType: bytea
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: 10
+      author:  zevrant
+      changes:
+        - sql: "insert into roles(role_name, role_desc) values('admin', 'allows user to manage other users')"
+        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(0, 'zevrant', '$2a$31$j72yLQO7QFpslkW8MRWR9OeYg6VpNQ4SWsnuf9NVysuXpQ/4ciJue', 'false', 'false', 'gerethd@gmail.com')"
+        - sql: "insert into role_association(username, role) values('zevrant', 'admin')"
+        - sql: "insert into role_association(username, role) values('zevrant', 'prints')"
+  - changeSet:
+      id: 11
+      author: zevrant
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: current_authentication
+                  type: VARCHAR(2048)
+            schemaName: public
+            tableName: users
+  - changeSet:
+      id: 12
+      author: zevrant
+      changes:
+        sqlFile:
+          path: db/changelog/oauth2-tokenstore.sql
+  - changeSet:
+      id: 13
+      author:  zevrant
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: role_type
+                  type: VARCHAR(255)
+            schemaName: public
+            tableName: roles
+        - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows dnd to make service to service calls', 'service')"
+        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'dnd-service', '$2a$31$jojJUnJMfQILOgfXS2GkTuZz8CE/hmdKqsFrzuX9TXX2RzytG.I4y', 'false', 'false', 'gerethd@gmail.com')"
+  - changeSet:
+      id: 14
+      author: zevrant
+      changes:
+        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-2, 'test-admin', '$2a$31$j72yLQO7QFpslkW8MRWR9OeYg6VpNQ4SWsnuf9NVysuXpQ/4ciJue', 'false', 'false', 'gerethd@gmail.com')"
+        - sql: "insert into roles(role_name, role_desc, role_type) values('test-user', 'allows user to delete normally create only items', 'service')"
+        - sql: "insert into role_association(username, role) values('test-admin', 'test-user')"
