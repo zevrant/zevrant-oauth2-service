@@ -38,10 +38,6 @@ spec:
             path: /i-data/420aa917/nfs/keys
       nodeSelector:
         architecture: arm
-      tolerations:
-        - key: kube2iam
-          value: kube2iam
-          effect: NoSchedule
       containers:
         - name: zevrant-oauth2-service-db
           image: postgres:12
