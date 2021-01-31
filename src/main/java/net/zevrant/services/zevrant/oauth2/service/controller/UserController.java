@@ -162,7 +162,6 @@ public class UserController {
     }
 
     @GetMapping("/roles/search/{page}/{pageSize}")
-    @PreAuthorize("hasAnyAuthority('admin')")
     public RoleResponse getAllRoles(@PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
         return userService.searchRoles(page, pageSize);
     }

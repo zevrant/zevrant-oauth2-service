@@ -151,7 +151,7 @@ public class UserService {
     public RoleResponse searchRoles(int page, int pageSize) {
         List<String> roles = new ArrayList<>();
         PageRequest pageRequest = PageRequest.of(page, pageSize);
-        Page<Role> pageResponse = roleRepository.findAll(pageRequest);
+        Page<Role> pageResponse = roleRepository.findAllUserRoles(pageRequest);
         pageResponse.forEach((role -> roles.add(role.getRoleName())));
         return new RoleResponse(pageResponse.getTotalElements(), roles);
     }
