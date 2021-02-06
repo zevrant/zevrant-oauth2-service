@@ -15,8 +15,6 @@ USER zevrant-oauth2-service
 
 COPY build/libs/zevrant-oauth2-service-*.jar /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
 
-RUN mkdir ~/.aws; echo "[default]" > ~/.aws/config; echo "region = us-east-1" >> ~/.aws/config; echo "output = json" >> ~/.aws/config
-
 CMD export ROLE_ARN="arn:aws:iam::725235728275:role/OauthServiceRole" \
  && openssl req -newkey rsa:4096 -nodes -keyout ~/private.pem -x509 -days 365 -out ~/public.crt -subj "/C=US/ST=New York/L=Brooklyn/O=Example Brooklyn Company/CN=examplebrooklyn.com"\
  && password=`date +%s | sha256sum | base64 | head -c 32`\

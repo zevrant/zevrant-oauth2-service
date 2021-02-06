@@ -26,8 +26,4 @@ zevrant:
     key-store: /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-services.p12
     key-store-password: ${password}
 
-logging:
-  level:
-    root: ERROR
-    net.zevrant.services.zevrant.oauth2.service: debug
 
