@@ -39,7 +39,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         this.clientDetailsService = clientDetailsService;
         this.restTemplate = restTemplate;
         this.tokenServices = tokenServices;
-        openPaths = new String[]{"/authorize", "/oauth/token", "/oath/check_token", "/user/forgot-password", "/register", "/actuator/health", "/user/roles/search/*/*"};
+        openPaths = new String[]{"/authorize", "/oauth/token", "/oath/check_token", "/user/forgot-password", "/register", "/actuator/health", "/actuator/prometheus", "/user/roles/search/*/*"};
     }
 
     @Override

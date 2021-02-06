@@ -252,17 +252,17 @@ databaseChangeLog:
         - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-2, 'test-admin', '$2a$31$j72yLQO7QFpslkW8MRWR9OeYg6VpNQ4SWsnuf9NVysuXpQ/4ciJue', 'false', 'false', 'gerethd@gmail.com')"
         - sql: "insert into roles(role_name, role_desc, role_type) values('test-user', 'allows user to delete normally create only items', 'service')"
         - sql: "insert into role_association(username, role) values('test-admin', 'test-user')"
-  - changeSet:
-      id: 13
-      author: zevrant
-      changes:
-        - addColumn:
-            columns:
-              - column:
-                  name: role_type
-                  type: VARCHAR(255)
-            schemaName: public
-            tableName: roles
-        - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows sensors to make service to service calls', 'service')"
-        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'sensor-service', '$2a$10$.NRN26TdrPHRpZdOvCkSYOoxrcxhdHknI3JeiAHL6.jJ7HpulrQom', 'false', 'false', 'gerethd@gmail.com')"
-        - sql: ""
+#  - changeSet:
+#      id: 15
+#      author: zevrant
+#      changes:
+#        - addColumn:
+#            columns:
+#              - column:
+#                  name: role_type
+#                  type: VARCHAR(255)
+#            schemaName: public
+#            tableName: roles
+#        - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows sensors to make service to service calls', 'service')"
+#        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'sensor-service', '$2a$10$.NRN26TdrPHRpZdOvCkSYOoxrcxhdHknI3JeiAHL6.jJ7HpulrQom', 'false', 'false', 'gerethd@gmail.com')"
+#        - sql: ""
