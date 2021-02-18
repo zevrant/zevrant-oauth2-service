@@ -56,3 +56,7 @@ spec:
                   key: proxyCreds
             - name: ENVIRONMENT
               value: $ENVIRONMENT
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
