@@ -18,5 +18,7 @@ COPY build/libs/zevrant-oauth2-service-*.jar /usr/local/microservices/zevrant-ho
 RUN mkdir ~/.aws; echo "[default]" > ~/.aws/config; echo "region = us-east-1" >> ~/.aws/config; echo "output = json" >> ~/.aws/config
 
 CMD export ROLE_ARN="arn:aws:iam::725235728275:role/OauthServiceRole" \
- && curl https://raw.githubusercontent.com/zevrant/zevrant-services-pipeline/master/bash/zevrant-services-start.sh | bash \
+ && password=`date +%s | sha256sum | base64 | head -c 32` \
+ && curl https://raw.githubusercontent.com/zevrant/zevrant-services-pipeline/master/bash/zevrant-services-start.sh > startup.sh \
+ && bash startup.sh $password
  && java -jar -Dspring.profiles.active=$ENVIRONMENT -Dpassword=$password /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
