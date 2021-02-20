@@ -19,6 +19,6 @@ RUN mkdir ~/.aws; echo "[default]" > ~/.aws/config; echo "region = us-east-1" >>
 
 CMD export ROLE_ARN="arn:aws:iam::725235728275:role/OauthServiceRole" \
  && password=`date +%s | sha256sum | base64 | head -c 32` \
- && curl https://raw.githubusercontent.com/zevrant/zevrant-services-pipeline/master/bash/zevrant-services-start.sh > startup.sh \
- && bash startup.sh $password \
+ && curl https://raw.githubusercontent.com/zevrant/zevrant-services-pipeline/master/bash/zevrant-services-start.sh > /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/startup.sh \
+ && bash /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/startup.sh $password \
  && java -jar -Dspring.profiles.active=$ENVIRONMENT -Dpassword=$password /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
