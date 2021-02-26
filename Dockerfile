@@ -22,5 +22,5 @@ RUN curl https://raw.githubusercontent.com/zevrant/zevrant-services-pipeline/mas
 
 CMD export ROLE_ARN="arn:aws:iam::725235728275:role/OauthServiceRole" \
  && password=`date +%s | sha256sum | base64 | head -c 32` \
- && bash ~/startup.sh zevrant-notification-service $password \
+ && bash ~/startup.sh zevrant-oauth2-service $password \
  && java -jar -Dspring.profiles.active=$ENVIRONMENT -Dpassword=$password /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
