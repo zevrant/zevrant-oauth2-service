@@ -257,12 +257,17 @@ databaseChangeLog:
 #      author: zevrant
 #      changes:
 #        - addColumn:
-#            columns:
-#              - column:
-#                  name: role_type
-#                  type: VARCHAR(255)
-#            schemaName: public
-#            tableName: roles
-#        - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows sensors to make service to service calls', 'service')"
-#        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'sensor-service', '$2a$10$.NRN26TdrPHRpZdOvCkSYOoxrcxhdHknI3JeiAHL6.jJ7HpulrQom', 'false', 'false', 'gerethd@gmail.com')"
-#        - sql: ""
+  #            columns:
+  #              - column:
+  #                  name: role_type
+  #                  type: VARCHAR(255)
+  #            schemaName: public
+  #            tableName: roles
+  #        - sql: "insert into roles(role_name, role_desc, role_type) values('dnd-service', 'allows sensors to make service to service calls', 'service')"
+  #        - sql: "insert into users(id, username, password, two_factor_enabled, subscribed, email_address) values(-1, 'sensor-service', '$2a$10$.NRN26TdrPHRpZdOvCkSYOoxrcxhdHknI3JeiAHL6.jJ7HpulrQom', 'false', 'false', 'gerethd@gmail.com')"
+  #        - sql: ""
+  - changeSet:
+      id: 16
+      author: zevrant
+      changes:
+        - sql: "insert into roles(role_name, role_desc, role_type) values('backups', 'allows user access to backup files', 'user')"
