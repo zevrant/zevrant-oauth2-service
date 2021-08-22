@@ -37,7 +37,7 @@ zevrant:
   bucketName:
   keystore:
   encrypted:
-    properties: ssl/keystore/password,rds/oauth2/password
+    properties: ssl/keystore/password,rds/oauth2/password,email/password
 
 context:
   initializer:

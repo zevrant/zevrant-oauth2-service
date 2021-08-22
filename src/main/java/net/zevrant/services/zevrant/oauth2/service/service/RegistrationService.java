@@ -9,6 +9,7 @@ import net.zevrant.services.zevrant.oauth2.service.rest.response.RegistrationCod
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +30,15 @@ public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RegistrationRepository registrationRepository;
+    private final String emailPassword;
 
     @Autowired
-    public RegistrationService(PasswordEncoder passwordEncoder, UserRepository userRepository, RegistrationRepository registrationRepository) {
+    public RegistrationService(PasswordEncoder passwordEncoder, UserRepository userRepository, RegistrationRepository registrationRepository,
+                               @Value("${email.password}") String emailPassword) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.registrationRepository = registrationRepository;
+        this.emailPassword = emailPassword;
     }
 
     public boolean register(String username, String password) throws UserAlreadyExistsException {
@@ -81,7 +85,7 @@ public class RegistrationService {
 
             protected PasswordAuthentication getPasswordAuthentication() {
 
-                return new PasswordAuthentication("workmailtome@gmail.com", "brbnyganfhfnfktp");
+                return new PasswordAuthentication("gerethd@gmail.com", emailPassword);
 
             }
 
