@@ -1,4 +1,4 @@
-FROM zevrant/zevrant-ubuntu-base:latest
+FROM docker.io/zevrant/zevrant-ubuntu-base:latest
 
 EXPOSE 9001
 
@@ -20,7 +20,6 @@ RUN mkdir ~/.aws; echo "[default]" > ~/.aws/config; echo "region = us-east-1" >>
 RUN curl https://raw.githubusercontent.com/zevrant/zevrant-services-pipeline/master/bash/zevrant-services-start.sh > ~/startup.sh \
   && curl https://raw.githubusercontent.com/zevrant/zevrant-services-pipeline/master/bash/openssl.conf > ~/openssl.conf
 
-CMD export ROLE_ARN="arn:aws:iam::725235728275:role/OauthServiceRole" \
- && password=`date +%s | sha256sum | base64 | head -c 32` \
+CMD password=`date +%s | sha256sum | base64 | head -c 32` \
  && bash ~/startup.sh zevrant-oauth2-service $password \
  && java -jar -Dspring.profiles.active=$ENVIRONMENT -Dpassword=$password /usr/local/microservices/zevrant-home-services/zevrant-oauth2-service/zevrant-oauth2-service.jar
