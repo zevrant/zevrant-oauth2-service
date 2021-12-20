@@ -1,47 +1,52 @@
 spring:
+  webflux:
+    base-path: /zevrant-oauth2-service
   main:
     allow-bean-definition-overriding: true
   profiles:
     active: local
-  datasource:
-    url: jdbc:postgresql://localhost:5433/oauth2?createDatabaseIfNotExist=true
-    username: sa
-    password: example
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: zevrant-oauth2-service
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master-local.yaml
+  aop:
+    proxy-target-class: true
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: https://localhost:9011/auth/realms/zevrant-services
+        registration:
+          keycloak:
+            client-id: ${zevrant.services.oauth.clientId}
+            client-scret: ${zevrant.services.oauth.clientSecret}
+      resourceserver:
+        jwt:
+          issuer-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}
+
 
 server:
   port: 9001
-  servlet:
-    context-path: /${spring.application.name}
   ssl:
     key-store: /storage/keys/zevrant-services.p12
     key-store-type: PKCS12
-    key-store-password: ${ssl.keystore.password}
+    key-store-password: ${password}
 oauth2:
   keystore:
     alias: 1
 
 zevrant:
-  ssl:
-    key-store: /storage/keys/zevrant-services.p12
-    key-store-password: ${ssl.keystore.password}
-  bucketName:
-  keystore:
+  services:
+    keycloak:
+      baseUrl: 'https://localhost:9011/auth'
+    oauth:
+      clientId: ${oauth.oauth.clientId}
+      clientSecret: ${oauth.oauth.clientSecret}
   encrypted:
-    properties: ssl/keystore/password,rds/oauth2/password,email/password
+    properties: oauth/oauth/clientId,oauth/oauth/clientSecret,oauth/admin/clientId,oauth/admin/clientSecret
 
 context:
   initializer:
-    classes: net.zevrant.services.security.common.secrets.management.services.EncryptedPropertyContextInitializer
+    classes: com.zevrant.services.zevrantsecuritycommon.services.EncryptedPropertyContextInitializer
 
 management:
   endpoints:
@@ -56,4 +61,4 @@ management:
 logging:
   level:
     root: info
-    net.zevrant.services: debug
+    com.zevrant.services: debug
