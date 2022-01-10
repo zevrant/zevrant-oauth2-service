@@ -18,7 +18,7 @@ metadata:
   labels:
     app: zevrant-oauth2-service
 spec:
-  replicas: 2
+  replicas: $REPLICAS
   selector:
     matchLabels:
       app: zevrant-oauth2-service
@@ -42,11 +42,15 @@ spec:
               path: /zevrant-oauth2-service/actuator/health
               port: 9001
             initialDelaySeconds: 30
+            failureThreshold: 5
+            periodSeconds: 5
           livenessProbe:
             httpGet:
               scheme: HTTPS
               path: /zevrant-oauth2-service/actuator/health
               port: 9001
+            failureThreshold: 5
+            periodSeconds: 5
             initialDelaySeconds: 30
           env:
             - name: AWS_ACCESS_KEY_ID
@@ -68,7 +72,7 @@ spec:
           resources:
             requests:
               memory: 4Gi
-              cpu: 750m
+              cpu: 1000m
             limits:
               memory: 4Gi
-              cpu: 750m
+              cpu: 1000m
