@@ -53,15 +53,15 @@ spec:
             periodSeconds: 5
             initialDelaySeconds: 30
           env:
-            - name: AWS_ACCESS_KEY_ID
+            - name: ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: zevrant-oauth2-service-aws
+                  name: oauth-vault-credentials
                   key: username
-            - name: AWS_SECRET_ACCESS_KEY
+            - name: SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: zevrant-oauth2-service-aws
+                  name: oauth-vault-credentials
                   key: password
             - name: ENVIRONMENT
               value: $ENVIRONMENT
