@@ -31,6 +31,12 @@ spec:
         - name: regcred
       nodeSelector:
         architecture: amd64
+      volumes:
+        - name: oauth2-acme
+          glusterfs:
+            endpoints: glusterfs-cluster
+            path: vault-$ENVIRONMMENT-acme
+            readOnly: false
       containers:
         - name: zevrant-oauth2-service
           image: zevrant/zevrant-oauth2-service:$VERSION
@@ -52,6 +58,9 @@ spec:
             failureThreshold: 5
             periodSeconds: 5
             initialDelaySeconds: 30
+          volumeMounts:
+            - name: vault-acme
+              mountPath: /storage/keys
           env:
             - name: ACCESS_KEY_ID
               valueFrom:
@@ -69,6 +78,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: CA_FINGERPRINT
+              valueFrom:
+                secretKeyRef:
+                  key: fingerprint
+                  name: ca-fingerprint
+            - name: KEYSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: zevrant-oauth2-service-keystore-password
           resources:
             requests:
               memory: 4Gi
@@ -76,3 +95,37 @@ spec:
             limits:
               memory: 4Gi
               cpu: 1000m
+        - name: acme-server
+          image: docker.io/zevrant/acme-server:latest
+          ports:
+            - containerPort: 80
+          command:
+            - "/bin/sh"
+          args:
+            - "-c"
+            - |
+              /usr/bin/step ca bootstrap --ca-url certificate-authority --fingerprint 0d7d3834cf187726cf331c40a31aa7ef6b29ba4df601416c9788f6ee01058cf3 
+              nginx
+              mkdir -p /opt/acme/certs
+              mkdir -p /opt/acme/root
+              /usr/bin/step ca certificate zevrant-oauth2-service /opt/acme/certs/public.crt /opt/acme/certs/private.pem --ca-url https://certificate-authority --provisioner acme --webroot /opt/acme/root  --san $POD_IP --san $SERVICE_NAME --san $POD_IP $additionalSans
+              openssl pkcs12 -export -inkey /opt/acme/certs/private.pem -in /opt/acme/certs/public.crt -passout "pass:$KEYSTORE_APSSWORD" -out /opt/acme/zevrant-services.p12
+              rm /opt/acme/certs/private.pem /opt/acme/certs/public.crt
+              chown -R 1000:1000 /opt/acme/certs
+              chmod g+r /opt/acme/certs/*
+              tail -f /var/log/nginx/access.log"
+          volumeMounts:
+            - name: vault-acme
+              mountPath: /opt/acme/
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SERVICE_NAME
+              value: zevrant-vault-service
+            - name: KEYSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: zevrant-oauth2-service-keystore-password
